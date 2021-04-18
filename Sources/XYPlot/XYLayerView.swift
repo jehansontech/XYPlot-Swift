@@ -8,11 +8,11 @@
 import SwiftUI
 import UIStuff
 
-struct YAxisLabelsView: View {
+public struct YAxisLabelsView: View {
 
-    var axisLabels: AxisLabels
+    public var axisLabels: AxisLabels
 
-    var body: some View {
+    public var body: some View {
 
         VStack {
             Text(axisLabels.name)
@@ -22,16 +22,16 @@ struct YAxisLabelsView: View {
         .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
     }
 
-    init(_ axisLabels: AxisLabels) {
+    public init(_ axisLabels: AxisLabels) {
         self.axisLabels = axisLabels
     }
 }
 
-struct XAxisLabelsView: View {
+public struct XAxisLabelsView: View {
 
-    var axisLabels: AxisLabels
+    public var axisLabels: AxisLabels
 
-    var body: some View {
+    public var body: some View {
         HStack {
             Text(axisLabels.name)
                 .lineLimit(1)
@@ -39,23 +39,23 @@ struct XAxisLabelsView: View {
         .frame(maxWidth: .infinity, maxHeight: XYPlotConstants.xAxisLabelsHeight)
     }
 
-    init(_ axisLabels: AxisLabels) {
+    public init(_ axisLabels: AxisLabels) {
         self.axisLabels = axisLabels
     }
 
 }
 
-struct XYLayerView: View {
+public struct XYLayerView: View {
 
-    var layerInsets = EdgeInsets(top: XYPlotConstants.layerTopInset, leading: 0, bottom: 0, trailing: XYPlotConstants.yAxisLabelsWidth)
+    public var layerInsets = EdgeInsets(top: XYPlotConstants.layerTopInset, leading: 0, bottom: 0, trailing: XYPlotConstants.yAxisLabelsWidth)
 
-    let layer: XYLayer
+    public let layer: XYLayer
 
-    init(_ layer: XYLayer) {
+    public init(_ layer: XYLayer) {
         self.layer = layer
     }
 
-    var body: some View {
+    public var body: some View {
 
         VStack(spacing: 0) {
 

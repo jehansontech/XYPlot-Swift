@@ -10,11 +10,11 @@ import SwiftUI
 ///
 ///
 ///
-struct XYPlotView: View {
+public struct XYPlotView: View {
 
     @State var model: XYPlotModel
 
-    var body: some View {
+    public var body: some View {
 
         ZStack {
 
@@ -33,11 +33,11 @@ struct XYPlotView: View {
 
     }
     
-    init(_ dataSource: XYDataSource) {
+    public init(_ dataSource: XYDataSource) {
         self._model = State(initialValue: XYPlotModel(dataSource))
     }
 
-    init(_ dataSources: [XYDataSource]) {
+    public init(_ dataSources: [XYDataSource]) {
         self._model = State(initialValue: XYPlotModel(dataSources))
     }
 }
