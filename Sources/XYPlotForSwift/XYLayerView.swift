@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import UIStuff-Swift
+import UIStuffForSwift
 
 public struct YAxisLabelsView: View {
 

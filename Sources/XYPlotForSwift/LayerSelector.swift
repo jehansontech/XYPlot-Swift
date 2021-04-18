@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import UIStuff_Swift
+import UIStuffForSwift
 
 public struct LayerSelector: View {
 

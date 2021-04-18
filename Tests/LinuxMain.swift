@@ -1,7 +1,7 @@
 import XCTest
 
-import UIStuffTests
+import XYPlotForSwiftTests
 
 var tests = [XCTestCaseEntry]()
-tests += UIStuffForSwiftTests.allTests()
+tests += XYPlotForSwiftTests.allTests()
 XCTMain(tests)
