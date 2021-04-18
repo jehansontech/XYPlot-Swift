@@ -18,7 +18,7 @@ struct XYPlotView: View {
 
         ZStack {
 
-            PlotOverlayView(model: $model)
+            PlotOverlayView($model)
                 .background(Color.clear)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .zIndex(0.1)

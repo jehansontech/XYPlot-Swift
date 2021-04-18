@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-typealias XYPoint = CGPoint
+public typealias XYPoint = CGPoint
 
-typealias XYRect = CGRect
+public typealias XYRect = CGRect
 
-extension XYRect {
+public extension XYRect {
 
     init(_ p: XYPoint) {
         self.init(x: p.x, y: p.y, width: 0, height: 0)
@@ -26,7 +26,7 @@ extension XYRect {
     }
 }
 
-protocol XYDataSet {
+public protocol XYDataSet {
 
     var color: Color? { get }
 
@@ -35,7 +35,7 @@ protocol XYDataSet {
     var bounds: XYRect? { get }
 }
 
-protocol XYDataSource {
+public protocol XYDataSource {
 
     var xAxisName: String { get }
 

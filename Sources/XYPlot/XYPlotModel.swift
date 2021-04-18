@@ -8,42 +8,43 @@
 import SwiftUI
 
 
-struct XYLineStyle {
+public struct XYLineStyle {
 
-    var color = Color.white
+    public var color = Color.white
 }
 
-struct AxisLabels {
-    var name: String
+public struct AxisLabels {
+
+    public var name: String
 }
 
-struct XYLine {
+public struct XYLine {
 
-    var dataSet: XYDataSet
+    public var dataSet: XYDataSet
 
-    var style: XYLineStyle
+    public var style: XYLineStyle
 
-    init(_ dataSet: XYDataSet, _ style: XYLineStyle) {
+    public init(_ dataSet: XYDataSet, _ style: XYLineStyle) {
         self.dataSet = dataSet
         self.style = style
     }
 }
 
-struct XYLayer {
+public struct XYLayer {
 
-    var title: String {
+    public var title: String {
         return "\(yAxisLabels.name) vs. \(xAxisLabels.name)"
     }
 
-    var xAxisLabels: AxisLabels
+    public var xAxisLabels: AxisLabels
 
-    var yAxisLabels: AxisLabels
+    public var yAxisLabels: AxisLabels
 
-    var lines = [XYLine]()
+    public var lines = [XYLine]()
 
-    var showing: Bool
+    public var showing: Bool
 
-    init(_ dataSource: XYDataSource, _ showing: Bool) {
+    public init(_ dataSource: XYDataSource, _ showing: Bool) {
         self.xAxisLabels = XYLayer.makeXAxisLabels(dataSource)
         self.yAxisLabels = XYLayer.makeYAxisLabels(dataSource)
         self.showing = showing
@@ -72,15 +73,15 @@ struct XYLayer {
     }
 }
 
-struct XYPlotModel {
+public struct XYPlotModel {
 
-    var layers = [XYLayer]()
+    public var layers = [XYLayer]()
 
-    init(_ dataSource: XYDataSource) {
+    public init(_ dataSource: XYDataSource) {
         layers.append(XYLayer(dataSource, true))
     }
 
-    init(_ dataSources: [XYDataSource]) {
+    public init(_ dataSources: [XYDataSource]) {
         var showing = true
         for dataSource in dataSources {
             layers.append(XYLayer(dataSource, showing))

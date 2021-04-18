@@ -17,13 +17,13 @@ private struct SizeKey: PreferenceKey {
     }
 }
 
-struct Rotated: ViewModifier {
+public struct Rotated: ViewModifier {
 
-    var angle: Angle
+    public var angle: Angle
 
     @State private var size: CGSize = .zero
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
 
         // Rotate the frame, and compute the smallest integral frame that contains it
         let newFrame = CGRect(origin: .zero, size: size)
@@ -72,7 +72,7 @@ struct Rotated: ViewModifier {
 //        }
 //    }
 
-extension View {
+public extension View {
 
     func captureSize(in binding: Binding<CGSize>) -> some View {
         overlay(GeometryReader { proxy in

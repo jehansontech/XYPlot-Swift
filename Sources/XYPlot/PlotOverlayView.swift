@@ -8,7 +8,7 @@
 import SwiftUI
 import UIStuff
 
-struct PlotOverlayView: View {
+public struct PlotOverlayView: View {
 
     static let rightSideVerticalSpacer: CGFloat = 40
 
@@ -16,7 +16,7 @@ struct PlotOverlayView: View {
 
     @State var layerSelectorShowing: Bool = false
 
-    var body: some View {
+    public var body: some View {
 
         HStack(alignment: .top) {
 
@@ -42,7 +42,7 @@ struct PlotOverlayView: View {
                     .modifier(SymbolButtonStyle())
                     .foregroundColor(UIConstants.controlColor)
                     .popover(isPresented: $layerSelectorShowing) {
-                        LayerSelector(model: $model)
+                        LayerSelector($model)
                             .modifier(PopStyle())
                     }
                     // end Layers button
@@ -54,5 +54,9 @@ struct PlotOverlayView: View {
             // end right edge VStack
         }
         // end outermost HStack
+    }
+
+    init(_ model: Binding<XYPlotModel>) {
+        self._model = model
     }
 }

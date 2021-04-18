@@ -8,13 +8,13 @@
 import SwiftUI
 import UIStuff
 
-struct LayerSelector: View {
+public struct LayerSelector: View {
 
     @Binding var model: XYPlotModel
 
     @Environment(\.presentationMode) var presentationMode
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading) {
             Text("Show:")
                 .font(.headline)
@@ -32,6 +32,10 @@ struct LayerSelector: View {
                 }
             }
         }
+    }
+
+    public init(_ model: Binding<XYPlotModel>) {
+        self._model = model
     }
 
     func selectLayer(_ layer: Int) {
