@@ -1,2 +1,2 @@
-# XYPlot-Swift
-2D plotter
+# XYPlotForSwift
+2D plotter in SwiftUI
