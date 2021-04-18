@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import UIStuff
+import UIStuff-Swift
 
 public struct PlotOverlayView: View {
 
