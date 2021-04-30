@@ -10,8 +10,6 @@ import UIStuffForSwift
 
 public struct PlotOverlayView: View {
 
-    static let rightSideVerticalSpacer: CGFloat = 40
-
     @Binding var model: XYPlotModel
 
     @State var layerSelectorShowing: Bool = false
@@ -26,10 +24,10 @@ public struct PlotOverlayView: View {
             VStack {
 
                 // shift down to avoid the page buttons
-                Spacer().frame(height: PlotOverlayView.rightSideVerticalSpacer)
+                Spacer().frame(height: UIConstants.symbolButtonHeight + UIConstants.buttonSpacing)
 
                 // right-side buttons
-                VStack(spacing: UIConstants.symbolButtonSpacing) {
+                VStack(spacing: UIConstants.buttonSpacing) {
 
                     // Layers button
                     Button(action: {
