@@ -16,6 +16,38 @@ public struct XYLineStyle {
 public struct AxisLabels {
 
     public var name: String
+
+    public var units: String?
+
+    init(name: String, units: String? = nil) {
+        self.name = name
+        self.units = units
+    }
+
+    func makeLabel(_ orderOfMagnitude: Int) -> String {
+        if let units = units {
+            if orderOfMagnitude == 0 {
+                return "\(name) (\(units))"
+            }
+            else if orderOfMagnitude == 1 {
+                return "\(name) (\(units) x 10)"
+            }
+            else {
+                return "\(name) (\(units) x 10^\(orderOfMagnitude))"
+            }
+        }
+        else {
+            if orderOfMagnitude == 0 {
+                return name
+            }
+            else if orderOfMagnitude == 1 {
+                return "\(name) (x10)"
+            }
+            else {
+                return "\(name) (x10^\(orderOfMagnitude))"
+            }
+        }
+    }
 }
 
 public struct XYLine {
