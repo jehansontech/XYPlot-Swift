@@ -45,7 +45,7 @@ public protocol XYDataSource {
 
     var yAxisName: String { get }
 
-    var yAxisUnits: String { get }
+    var yAxisUnits: String? { get }
 
     var dataSets: [XYDataSet] { get }
 }
