@@ -28,6 +28,8 @@ public extension XYRect {
 
 public protocol XYDataSet {
 
+    var name: String? { get }
+    
     var color: Color? { get }
 
     var points: [XYPoint] { get }
@@ -39,7 +41,11 @@ public protocol XYDataSource {
 
     var xAxisName: String { get }
 
+    var xAxisUnits: String? { get }
+
     var yAxisName: String { get }
+
+    var yAxisUnits: String { get }
 
     var dataSets: [XYDataSet] { get }
 }

@@ -87,11 +87,11 @@ public struct XYLayer {
     }
 
     private static func makeXAxisLabels(_ dataSource: XYDataSource) -> AxisLabels {
-        return AxisLabels(name: dataSource.xAxisName)
+        return AxisLabels(name: dataSource.xAxisName, units: dataSource.xAxisUnits)
     }
 
     private static func makeYAxisLabels(_ dataSource: XYDataSource) -> AxisLabels {
-        return AxisLabels(name: dataSource.yAxisName)
+        return AxisLabels(name: dataSource.yAxisName, units: dataSource.yAxisUnits)
 
     }
 
