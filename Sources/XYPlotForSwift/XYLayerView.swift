@@ -86,23 +86,28 @@ public struct YAxisLabelsView: View {
             }
 
             GeometryReader { geometry in
+
                 // TODO axis numbers
                 // TODO axis ticks
 
+
+                // NOTE the y-axis direction is reversed. max Y is at the bottom.
+
+
                 Text("B")
-                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY)
-                    .alignmentGuide(HorizontalAlignment.center) { viewDimensions in  -viewDimensions.width/2 }
+                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1)
+                    // NO EFFECT .alignmentGuide(HorizontalAlignment.center) { viewDimensions in  -viewDimensions.width/2 }
 
                 Path {
                     path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).minY + 1))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1))
+                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY - 1))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1))
                 }
                 .stroke()
 
                 Text("M")
+                    .alignmentGuide(HorizontalAlignment.trailing) { viewDimensions in  -viewDimensions.width }
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY)
-                    .alignmentGuide(HorizontalAlignment.center) { viewDimensions in  -viewDimensions.width }
 
                 Path {
                     path in
@@ -112,13 +117,13 @@ public struct YAxisLabelsView: View {
                 .stroke()
 
                 Text("T")
-                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY)
-                    .alignmentGuide(HorizontalAlignment.center) { viewDimensions in  -2 * viewDimensions.width }
+                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1)
+                    .alignmentGuide(HorizontalAlignment.trailing) { viewDimensions in  -viewDimensions.width }
 
                 Path {
                     path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY - 1))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1))
+                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).minY + 1))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1))
                 }
                 .stroke()
 
