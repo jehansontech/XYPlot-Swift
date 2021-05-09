@@ -93,20 +93,19 @@ public struct YAxisLabelsView: View {
 
                 // NOTE the y-axis direction is reversed. max Y is at the bottom.
 
-
-                Text("B")
-                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1)
-                    // NO EFFECT .alignmentGuide(HorizontalAlignment.center) { viewDimensions in  -viewDimensions.width/2 }
+                Text("T")
+                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1)
+                    .alignmentGuide(HorizontalAlignment.leading) { _ in  50 }
 
                 Path {
                     path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY - 1))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1))
+                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).minY + 1))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1))
                 }
                 .stroke()
 
                 Text("M")
-                    .alignmentGuide(HorizontalAlignment.leading) { viewDimensions in  -20 }
+                    .alignmentGuide(HorizontalAlignment.leading) { viewDimensions in  -50 }
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY)
 
                 Path {
@@ -116,16 +115,17 @@ public struct YAxisLabelsView: View {
                 }
                 .stroke()
 
-                Text("T")
-                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1)
-                    .alignmentGuide(HorizontalAlignment.leading) { viewDimensions in  -viewDimensions.width }
+                Text("B")
+                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1)
+                // NO EFFECT .alignmentGuide(HorizontalAlignment.center) { viewDimensions in  -viewDimensions.width/2 }
 
                 Path {
                     path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).minY + 1))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1))
+                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY - 1))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1))
                 }
                 .stroke()
+
 
             }
             .frame(minWidth: geometryReaderWidth, maxWidth: geometryReaderWidth, maxHeight: .infinity)
