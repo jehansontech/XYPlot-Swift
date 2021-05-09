@@ -91,7 +91,7 @@ public struct YAxisLabelsView: View {
 
                 Text("B")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY)
-                    .alignmentGuide(HorizontalAlignment.leading) { viewDimensions in viewDimensions.width / 2 }
+                    .alignmentGuide(HorizontalAlignment.leading) { viewDimensions in  -viewDimensions.width/2 }
 
                 Path {
                     path in
@@ -102,7 +102,7 @@ public struct YAxisLabelsView: View {
 
                 Text("M")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY)
-                    .border(Color.green)
+                    .alignmentGuide(HorizontalAlignment.leading) { viewDimensions in  -viewDimensions.width/2 }
 
                 Path {
                     path in
@@ -113,8 +113,7 @@ public struct YAxisLabelsView: View {
 
                 Text("T")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY)
-                    .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                    .border(Color.blue)
+                    .alignmentGuide(HorizontalAlignment.leading) { viewDimensions in  -viewDimensions.width/2 }
 
                 Path {
                     path in
