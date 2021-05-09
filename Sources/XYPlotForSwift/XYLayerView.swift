@@ -92,25 +92,25 @@ public struct YAxisLabelsView: View {
                     path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).minY))
                     path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - 10, y: geometry.frame(in: .local).minY))
                 }
-                .stroke(Color.blue)
+                .stroke(Color.white)
 
                 Path {
                     path in
                     path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).midY))
                     path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - 10, y: geometry.frame(in: .local).midY))
                 }
-                .stroke(Color.blue)
+                .stroke(Color.white)
 
                 Path {
                     path in
                     path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY))
                     path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - 10, y: geometry.frame(in: .local).maxY))
                 }
-                .stroke(Color.blue)
+                .stroke(Color.white)
 
             }
             .frame(minWidth: geometryReaderWidth, maxWidth: geometryReaderWidth, maxHeight: .infinity)
-            // .border(UIConstants.darkGray)
+            .border(UIConstants.darkGray)
         }
         .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
     }
