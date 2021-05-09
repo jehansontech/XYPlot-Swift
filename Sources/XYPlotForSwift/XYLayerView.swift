@@ -17,11 +17,14 @@ public struct XAxisLabelsView: View {
     public var body: some View {
         VStack(spacing: 0) {
             HStack {
-                // axis numbers
+                // TODO axis numbers
+                Text("L")
+                Spacer()
+                Text("R")
             }
-            HStack {
-                // axis ticks
-            }
+            GeometryReader {
+                // TODO axis ticks
+            }.border(Color.red)
             HStack {
                 Text(axisLabels.makeLabel(orderOfMagnitude))
                     .lineLimit(1)
@@ -50,11 +53,14 @@ public struct YAxisLabelsView: View {
                     .rotated(by: .degrees(-90))
             }
             VStack {
-                // axis numbers
+                // TODO axis numbers
+                Text("T")
+                Spacer()
+                Text("B")
             }
-            VStack {
-                // axis ticks
-            }
+            GeometryReader {
+                // TODO axis ticks
+            }.border(Color.red)
         }
         .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
     }
@@ -162,22 +168,20 @@ public struct XYLayerView: View {
         var bounds: XYRect? = nil
         for line in layer.lines {
             if let b2 = line.dataSet.bounds {
-                if bounds == nil {
-                    bounds = b2
+                if let oldBounds = bounds {
+                    bounds = oldBounds.union(b2)
                 }
                 else {
-                    bounds = bounds!.union(b2)
+                    bounds = b2
                 }
             }
         }
 
         if let bounds = bounds {
-
-            // TODO FIXME this always sets xMin and yMin to 0
-
-            let width = bounds.width > 0 ? bounds.width : 1
-            let height = bounds.height > 0 ? bounds.height : 1
-            return XYRect(x: 0, y: 0, width: width, height: height)
+            return XYRect(x: bounds.xMin,
+                          y: bounds.yMin,
+                          width: bounds.width > 0 ? bounds.width : 1,
+                          height: bounds.height > 0 ? bounds.height : 1)
         }
         else {
             return XYRect(x: 0, y: 0, width: 1, height: 1)
@@ -186,13 +190,9 @@ public struct XYLayerView: View {
 
     func mapToFrame(_ gp: GeometryProxy,  _ pt: CGPoint, _ bounds: XYRect) -> CGPoint {
 
-        // TODO FIXME this doesn't make use of bounds.xMin or bounds.yMin
-
         let frame = gp.frame(in: .local)
-        let framePt =  CGPoint(x: frame.width  * (pt.x / bounds.width)       + frame.minX,
-                               y: frame.height * (1 - pt.y / bounds.height)  + frame.minY)
-        // print("mapToFrame: \(pt) -> \(framePt) | \(bounds) -> \(frame) ")
-        return framePt
+        return CGPoint(x: frame.width  * (pt.x - bounds.xMin)     / bounds.width   + frame.minX,
+                       y: frame.height * (1 - pt.y + bounds.yMin) / bounds.height  + frame.minY)
     }
 
     static func makeDefaultStyles(_ dataSource: XYDataSource) -> [XYLineStyle] {
