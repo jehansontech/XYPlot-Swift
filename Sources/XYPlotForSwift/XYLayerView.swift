@@ -91,7 +91,7 @@ public struct YAxisLabelsView: View {
 
                 Text("B")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY)
-                    .border(Color.red)
+                    .alignmentGuide(HorizontalAlignment.leading) { viewDimensions in viewDimensions.width / 2 }
 
                 Path {
                     path in
