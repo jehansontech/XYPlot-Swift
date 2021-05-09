@@ -90,12 +90,12 @@ public struct YAxisLabelsView: View {
                 // TODO axis numbers
                 // TODO axis ticks
 
+                // .alignmentGuide has no effect here
 
                 // NOTE the y-axis direction is reversed. max Y is at the bottom.
 
+                HStack {
                 Text("TT")
-                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1)
-                    .alignmentGuide(HorizontalAlignment.center) { _ in  -100 }
 
                 Path {
                     path in
@@ -103,9 +103,10 @@ public struct YAxisLabelsView: View {
                     path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1))
                 }
                 .stroke()
+                }
+                .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1)
 
                 Text("MM")
-                    .alignmentGuide(HorizontalAlignment.center) { viewDimensions in  -100 }
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY)
 
                 Path {
