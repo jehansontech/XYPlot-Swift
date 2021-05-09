@@ -13,7 +13,7 @@ extension XYRect {
     func mapToFrame(_ gp: GeometryProxy,  _ pt: CGPoint) -> CGPoint {
         let frame = gp.frame(in: .local)
         return CGPoint(x: frame.width  * (pt.x - self.minX)     / self.width   + frame.minX,
-                       y: frame.height * (1 - pt.y - self.minY) / self.height  + frame.minY)
+                       y: frame.height * (1 - pt.y + self.minY) / self.height  + frame.minY)
     }
 
 }
