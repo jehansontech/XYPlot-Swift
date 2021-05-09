@@ -28,31 +28,27 @@ public struct XAxisLabelsView: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-            GeometryReader { geometry in
-                // TODO axis ticks
-                Path {
-                    path in
-                    path.move(to: CGPoint(x: 0, y: 0))
-                    path.addLine(to: CGPoint(x: 0, y: -10))
-                }
-                .stroke(Color.blue)
+//            GeometryReader { geometry in
+//                // TODO axis ticks
+//                Path {
+//                    path in
+//                    path.move(to: CGPoint(x: 0, y: 0))
+//                    path.addLine(to: CGPoint(x: 0, y: -10))
+//                }
+//                .stroke(Color.blue)
+//
+//                Path {
+//                    path in
+//                    path.move(to: CGPoint(x: 1, y: 0))
+//                    path.addLine(to: CGPoint(x: 1, y: -10))
+//                }
+//                .stroke(UIConstants.darkGray)
+//
+//                // TODO axis numbers
+//
+//            }
+//            // .border(Color.red)
 
-                Path {
-                    path in
-                    path.move(to: CGPoint(x: 1, y: 0))
-                    path.addLine(to: CGPoint(x: 1, y: -10))
-                }
-                .stroke(Color.blue)
-            }
-            // .border(Color.red)
-
-            HStack {
-                // TODO axis numbers
-                Text("L")
-                Spacer()
-                Text("R")
-            }
-            .foregroundColor(Color.clear)
 
             HStack {
                 Text(axisLabels.makeLabel(orderOfMagnitude))
@@ -93,22 +89,22 @@ public struct YAxisLabelsView: View {
                 // TODO axis ticks
                 Path {
                     path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .global).maxX, y: geometry.frame(in: .global).minY))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .global).maxX - 10, y: geometry.frame(in: .global).minY))
+                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).minY))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - 10, y: geometry.frame(in: .local).minY))
                 }
                 .stroke(Color.blue)
 
                 Path {
                     path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .global).maxX, y: geometry.frame(in: .global).midY))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .global).maxX - 10, y: geometry.frame(in: .global).midY))
+                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).midY))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - 10, y: geometry.frame(in: .local).midY))
                 }
                 .stroke(Color.blue)
 
                 Path {
                     path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .global).maxX, y: geometry.frame(in: .global).maxY))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .global).maxX - 10, y: geometry.frame(in: .global).maxY))
+                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - 10, y: geometry.frame(in: .local).maxY))
                 }
                 .stroke(Color.blue)
 
