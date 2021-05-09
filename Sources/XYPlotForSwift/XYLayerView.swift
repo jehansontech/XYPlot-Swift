@@ -74,7 +74,7 @@ public struct YAxisLabelsView: View {
     public var orderOfMagnitude: Int
 
     let tickLength: CGFloat = 10
-    let geometryReaderWidth: CGFloat = 30
+    let geometryReaderWidth: CGFloat = 50
 
     public var body: some View {
         HStack(spacing: 0) {
@@ -104,7 +104,8 @@ public struct YAxisLabelsView: View {
                 }
                 .stroke()
                 }
-                .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1)
+                .frame(width: geometryReaderWidth, alignment: .trailing)
+                .position(x: geometry.frame(in: .local).midX, y: geometry.frame(in: .local).minY + 1)
 
                 Text("MM")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY)
