@@ -93,9 +93,9 @@ public struct YAxisLabelsView: View {
 
                 // NOTE the y-axis direction is reversed. max Y is at the bottom.
 
-                Text("T")
+                Text("TT")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1)
-                    .alignmentGuide(HorizontalAlignment.leading) { _ in  50 }
+                    .alignmentGuide(HorizontalAlignment.center) { _ in  -100 }
 
                 Path {
                     path in
@@ -104,8 +104,8 @@ public struct YAxisLabelsView: View {
                 }
                 .stroke()
 
-                Text("M")
-                    .alignmentGuide(HorizontalAlignment.leading) { viewDimensions in  -50 }
+                Text("MM")
+                    .alignmentGuide(HorizontalAlignment.center) { viewDimensions in  -100 }
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY)
 
                 Path {
@@ -115,9 +115,8 @@ public struct YAxisLabelsView: View {
                 }
                 .stroke()
 
-                Text("B")
+                Text("BB")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1)
-                // NO EFFECT .alignmentGuide(HorizontalAlignment.center) { viewDimensions in  -viewDimensions.width/2 }
 
                 Path {
                     path in
