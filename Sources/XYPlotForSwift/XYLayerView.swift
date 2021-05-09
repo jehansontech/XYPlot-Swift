@@ -89,7 +89,8 @@ public struct YAxisLabelsView: View {
                 // TODO axis numbers
                 // TODO axis ticks
                 Text("B")
-                    .position(x: geometry.frame(in: .local).minX, y: geometry.frame(in: .local).minY)
+                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY)
+                    .border(Color.gray)
 
                 Path {
                     path in
@@ -99,7 +100,8 @@ public struct YAxisLabelsView: View {
                 .stroke()
 
                 Text("M")
-                    .position(x: geometry.frame(in: .local).minX, y: geometry.frame(in: .local).midY)
+                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY)
+                    .border(Color.gray)
 
                 Path {
                     path in
@@ -109,8 +111,9 @@ public struct YAxisLabelsView: View {
                 .stroke()
 
                 Text("T")
-                    .position(x: geometry.frame(in: .local).minX, y: geometry.frame(in: .local).maxY)
-                
+                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY)
+                    .border(Color.gray)
+
                 Path {
                     path in
                     path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY - 1))
