@@ -8,9 +8,21 @@
 import SwiftUI
 import UIStuffForSwift
 
+//extension XYRect {
+//
+//    func mapToFrame(_ gp: GeometryProxy,  _ pt: CGPoint) -> CGPoint {
+//        let frame = gp.frame(in: .local)
+//        return CGPoint(x: frame.width  * (pt.x - self.minX)     / self.width   + frame.minX,
+//                       y: frame.height * (1 - pt.y + self.minY) / self.height  + frame.minY)
+//    }
+//
+//}
+
 public struct XAxisLabelsView: View {
 
     public var axisLabels: AxisLabels
+
+    public var bounds: XYRect
 
     public var orderOfMagnitude: Int
 
@@ -22,8 +34,21 @@ public struct XAxisLabelsView: View {
                 Spacer()
                 Text("R")
             }
-            GeometryReader {
+            GeometryReader { geometry in
                 // TODO axis ticks
+                Path {
+                    path in
+                    path.move(to: CGPoint(x: 0, y: 0))
+                    path.addLine(to: CGPoint(x: 0, y: -10))
+                }
+                .stroke(Color.blue)
+
+                Path {
+                    path in
+                    path.move(to: CGPoint(x: 1, y: 0))
+                    path.addLine(to: CGPoint(x: 1, y: -10))
+                }
+                .stroke(Color.blue)
             }.border(Color.red)
             HStack {
                 Text(axisLabels.makeLabel(orderOfMagnitude))
@@ -33,8 +58,9 @@ public struct XAxisLabelsView: View {
         .frame(maxWidth: .infinity, maxHeight: XYPlotConstants.xAxisLabelsHeight)
     }
 
-    public init(_ axisLabels: AxisLabels, _ orderOfMagnitude: Int) {
+    public init(_ axisLabels: AxisLabels, _ bounds: XYRect, _ orderOfMagnitude: Int) {
         self.axisLabels = axisLabels
+        self.bounds = bounds
         self.orderOfMagnitude = orderOfMagnitude
     }
 }
@@ -42,6 +68,8 @@ public struct XAxisLabelsView: View {
 public struct YAxisLabelsView: View {
 
     public var axisLabels: AxisLabels
+
+    public var bounds: XYRect
 
     public var orderOfMagnitude: Int
 
@@ -58,15 +86,30 @@ public struct YAxisLabelsView: View {
                 Spacer()
                 Text("B")
             }
-            GeometryReader {
+            GeometryReader { geometry in
                 // TODO axis ticks
+                Path {
+                    path in
+                    path.move(to: CGPoint(x: 0, y: 0))
+                    path.addLine(to: CGPoint(x: -10, y: 0))
+                }
+                .stroke(Color.blue)
+
+                Path {
+                    path in
+                    path.move(to: CGPoint(x: 0, y: 1))
+                    path.addLine(to: CGPoint(x: -10, y: 1))
+                }
+                .stroke(Color.blue)
+
             }.border(Color.red)
         }
         .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
     }
 
-    public init(_ axisLabels: AxisLabels, _ orderOfMagnitude: Int) {
+    public init(_ axisLabels: AxisLabels, _ bounds: XYRect, _ orderOfMagnitude: Int) {
         self.axisLabels = axisLabels
+        self.bounds = bounds
         self.orderOfMagnitude = orderOfMagnitude
     }
 }
@@ -106,7 +149,7 @@ public struct XYLayerView: View {
             HStack(spacing: 0) {
 
                 // y-axis names needs to be centered w/r/t GeometryReader
-                YAxisLabelsView(layer.yAxisLabels, yAxisOrderOfMagnitude)
+                YAxisLabelsView(layer.yAxisLabels, bounds, yAxisOrderOfMagnitude)
 
                 GeometryReader { geometry in
 
@@ -141,7 +184,7 @@ public struct XYLayerView: View {
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
 
                 // x-axis label needs to be centered w.r.t GeometryReader
-                XAxisLabelsView(layer.xAxisLabels, xAxisOrderOfMagnitude)
+                XAxisLabelsView(layer.xAxisLabels, bounds, xAxisOrderOfMagnitude)
             }
             // end HStack for x-axis labels
 
@@ -178,8 +221,8 @@ public struct XYLayerView: View {
         }
 
         if let bounds = bounds {
-            return XYRect(x: bounds.xMin,
-                          y: bounds.yMin,
+            return XYRect(x: bounds.minX,
+                          y: bounds.minY,
                           width: bounds.width > 0 ? bounds.width : 1,
                           height: bounds.height > 0 ? bounds.height : 1)
         }
@@ -191,8 +234,8 @@ public struct XYLayerView: View {
     func mapToFrame(_ gp: GeometryProxy,  _ pt: CGPoint, _ bounds: XYRect) -> CGPoint {
 
         let frame = gp.frame(in: .local)
-        return CGPoint(x: frame.width  * (pt.x - bounds.xMin)     / bounds.width   + frame.minX,
-                       y: frame.height * (1 - pt.y + bounds.yMin) / bounds.height  + frame.minY)
+        return CGPoint(x: frame.width  * (pt.x - bounds.minX)     / bounds.width   + frame.minX,
+                       y: frame.height * (1 - pt.y + bounds.minY) / bounds.height  + frame.minY)
     }
 
     static func makeDefaultStyles(_ dataSource: XYDataSource) -> [XYLineStyle] {
