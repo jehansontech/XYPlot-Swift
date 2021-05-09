@@ -84,13 +84,16 @@ public struct YAxisLabelsView: View {
                     .lineLimit(1)
                     .rotated(by: .degrees(-90))
             }
+            .border(UIConstants.darkGray)
+
             VStack {
                 // TODO axis numbers
                 Text("T")
                 Spacer()
                 Text("B")
             }
-            .foregroundColor(Color.clear)
+            .foregroundColor(UIConstants.darkGray)
+            .border(UIConstants.darkGray)
 
             GeometryReader { geometry in
                 // TODO axis ticks
@@ -109,7 +112,7 @@ public struct YAxisLabelsView: View {
                 .stroke(Color.blue)
 
             }
-            // .border(Color.red)
+            .border(UIConstants.darkGray)
         }
         .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
     }
