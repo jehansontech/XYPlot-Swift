@@ -77,12 +77,13 @@ public struct YAxisLabelsView: View {
 
     public var body: some View {
         HStack(spacing: 0) {
+
             VStack {
                 Text(axisLabels.makeLabel(orderOfMagnitude))
                     .lineLimit(1)
                     .rotated(by: .degrees(-90))
             }
-            .border(UIConstants.darkGray)
+            // .border(UIConstants.darkGray)
 
             GeometryReader { geometry in
                 // TODO axis numbers
@@ -110,10 +111,11 @@ public struct YAxisLabelsView: View {
 
             }
             .frame(minWidth: geometryReaderWidth, maxWidth: geometryReaderWidth, maxHeight: .infinity)
-            .border(UIConstants.darkGray)
+            // .border(UIConstants.darkGray)
         }
-        .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
-        .border(UIConstants.darkGray)
+        .frame(maxHeight: .infinity)
+        // .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
+        // .border(UIConstants.darkGray)
     }
 
     public init(_ axisLabels: AxisLabels, _ bounds: XYRect, _ orderOfMagnitude: Int) {
@@ -158,7 +160,7 @@ public struct XYLayerView: View {
             HStack(spacing: 0) {
 
                 Spacer()
-                
+
                 // y-axis names needs to be centered w/r/t GeometryReader
                 YAxisLabelsView(layer.yAxisLabels, bounds, yAxisOrderOfMagnitude)
 
