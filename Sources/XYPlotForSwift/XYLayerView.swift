@@ -88,9 +88,10 @@ public struct YAxisLabelsView: View {
             GeometryReader { geometry in
                 // TODO axis numbers
                 // TODO axis ticks
+
                 Text("B")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY)
-                    .border(Color.gray)
+                    .border(Color.red)
 
                 Path {
                     path in
@@ -101,7 +102,7 @@ public struct YAxisLabelsView: View {
 
                 Text("M")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY)
-                    .border(Color.gray)
+                    .border(Color.green)
 
                 Path {
                     path in
@@ -112,7 +113,8 @@ public struct YAxisLabelsView: View {
 
                 Text("T")
                     .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY)
-                    .border(Color.gray)
+                    .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    .border(Color.blue)
 
                 Path {
                     path in
