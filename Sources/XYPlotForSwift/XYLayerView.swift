@@ -157,6 +157,8 @@ public struct XYLayerView: View {
             // begin HStack for y-axis labels and plot
             HStack(spacing: 0) {
 
+                Spacer()
+                
                 // y-axis names needs to be centered w/r/t GeometryReader
                 YAxisLabelsView(layer.yAxisLabels, bounds, yAxisOrderOfMagnitude)
 
