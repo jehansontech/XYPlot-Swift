@@ -28,28 +28,9 @@ public struct XAxisLabelsView: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-//            GeometryReader { geometry in
-//                // TODO axis ticks
-//                Path {
-//                    path in
-//                    path.move(to: CGPoint(x: 0, y: 0))
-//                    path.addLine(to: CGPoint(x: 0, y: -10))
-//                }
-//                .stroke(Color.blue)
-//
-//                Path {
-//                    path in
-//                    path.move(to: CGPoint(x: 1, y: 0))
-//                    path.addLine(to: CGPoint(x: 1, y: -10))
-//                }
-//                .stroke(UIConstants.darkGray)
-//
-//                // TODO axis numbers
-//
-//            }
-//            // .border(Color.red)
 
-
+            // TODO ticks and numbers
+            
             HStack {
                 Text(axisLabels.makeLabel(orderOfMagnitude))
                     .lineLimit(1)
@@ -73,9 +54,6 @@ public struct YAxisLabelsView: View {
 
     public var orderOfMagnitude: Int
 
-    let tickLength: CGFloat = 10
-    let geometryReaderWidth: CGFloat = 50
-
     public var body: some View {
         HStack(spacing: 0) {
 
@@ -85,56 +63,9 @@ public struct YAxisLabelsView: View {
                     .rotated(by: .degrees(-90))
             }
 
-            GeometryReader { geometry in
-
-                // TODO axis numbers
-                // TODO axis ticks
-
-                // .alignmentGuide has no effect here
-
-                // NOTE the y-axis direction is reversed. max Y is at the bottom.
-
-                HStack {
-                Text("TT")
-
-                Path {
-                    path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).minY + 1))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1))
-                }
-                .stroke()
-                }
-                .frame(width: geometryReaderWidth, alignment: .trailing)
-                .position(x: geometry.frame(in: .local).midX, y: geometry.frame(in: .local).minY + 1)
-
-                Text("MM")
-                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY)
-
-                Path {
-                    path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).midY))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY))
-                }
-                .stroke()
-
-                Text("BB")
-                    .position(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1)
-
-                Path {
-                    path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY - 1))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1))
-                }
-                .stroke()
-
-
-            }
-            .frame(minWidth: geometryReaderWidth, maxWidth: geometryReaderWidth, maxHeight: .infinity)
-            // .border(UIConstants.darkGray)
+            // TODO numbers and ticks
         }
         .frame(maxHeight: .infinity)
-        // .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
-        // .border(UIConstants.darkGray)
     }
 
     public init(_ axisLabels: AxisLabels, _ bounds: XYRect, _ orderOfMagnitude: Int) {
@@ -183,6 +114,9 @@ public struct XYLayerView: View {
                 // y-axis names needs to be centered w/r/t GeometryReader
                 YAxisLabelsView(layer.yAxisLabels, bounds, yAxisOrderOfMagnitude)
 
+                // ==================================================================
+                // Begin the plot
+
                 GeometryReader { geometry in
 
                     ForEach(layer.lines.indices, id: \.self) { lineIdx in
@@ -201,9 +135,9 @@ public struct XYLayerView: View {
                     }
                 }
                 .background(UIConstants.trueBlack)
-                // (No border b/c it might hide data line)
-                // .border(UIConstants.darkGray)
-                // end GeometryReader
+
+                // End the plot
+                // ==================================================================
 
             }
             // end HStack for y-axis labels and plot
