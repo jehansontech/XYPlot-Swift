@@ -8,15 +8,15 @@
 import SwiftUI
 import UIStuffForSwift
 
-//extension XYRect {
-//
-//    func mapToFrame(_ gp: GeometryProxy,  _ pt: CGPoint) -> CGPoint {
-//        let frame = gp.frame(in: .local)
-//        return CGPoint(x: frame.width  * (pt.x - self.minX)     / self.width   + frame.minX,
-//                       y: frame.height * (1 - pt.y + self.minY) / self.height  + frame.minY)
-//    }
-//
-//}
+extension XYRect {
+
+    func mapToFrame(_ gp: GeometryProxy,  _ pt: CGPoint) -> CGPoint {
+        let frame = gp.frame(in: .local)
+        return CGPoint(x: frame.width  * (pt.x - self.minX)     / self.width   + frame.minX,
+                       y: frame.height * (1 - pt.y + self.minY) / self.height  + frame.minY)
+    }
+
+}
 
 public struct XAxisLabelsView: View {
 
@@ -77,6 +77,8 @@ public struct YAxisLabelsView: View {
 
     public var orderOfMagnitude: Int
 
+    let geometryReaderWidth: CGFloat = 15
+
     public var body: some View {
         HStack(spacing: 0) {
             VStack {
@@ -86,33 +88,33 @@ public struct YAxisLabelsView: View {
             }
             .border(UIConstants.darkGray)
 
-            VStack {
-                // TODO axis numbers
-                Text("T")
-                Spacer()
-                Text("B")
-            }
-            .foregroundColor(UIConstants.darkGray)
-            .border(UIConstants.darkGray)
-
             GeometryReader { geometry in
+                // TODO axis numbers
                 // TODO axis ticks
                 Path {
                     path in
-                    path.move(to: CGPoint(x: 0, y: 0))
-                    path.addLine(to: CGPoint(x: -10, y: 0))
+                    path.move(to: CGPoint(x: geometry.frame(in: .global).maxX, y: geometry.frame(in: .global).minY))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .global).maxX - 10, y: geometry.frame(in: .global).minY))
                 }
                 .stroke(Color.blue)
 
                 Path {
                     path in
-                    path.move(to: CGPoint(x: 0, y: 1))
-                    path.addLine(to: CGPoint(x: -10, y: 1))
+                    path.move(to: CGPoint(x: geometry.frame(in: .global).maxX, y: geometry.frame(in: .global).midY))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .global).maxX - 10, y: geometry.frame(in: .global).midY))
+                }
+                .stroke(Color.blue)
+
+                Path {
+                    path in
+                    path.move(to: CGPoint(x: geometry.frame(in: .global).maxX, y: geometry.frame(in: .global).maxY))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .global).maxX - 10, y: geometry.frame(in: .global).maxY))
                 }
                 .stroke(Color.blue)
 
             }
-            .border(UIConstants.darkGray)
+            .frame(minWidth: geometryReaderWidth, maxWidth: geometryReaderWidth, maxHeight: .infinity)
+            // .border(UIConstants.darkGray)
         }
         .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
     }
@@ -168,9 +170,9 @@ public struct XYLayerView: View {
                         if points.count > 0 {
 
                             Path { path in
-                                path.move(to: mapToFrame(geometry, points[0], bounds))
+                                path.move(to: bounds.mapToFrame(geometry, points[0]))
                                 for j in 1..<points.count {
-                                    path.addLine(to: mapToFrame(geometry, points[j], bounds))
+                                    path.addLine(to: bounds.mapToFrame(geometry, points[j]))
                                 }
                             }
                             .stroke(layer.lines[lineIdx].style.color)
@@ -217,6 +219,13 @@ public struct XYLayerView: View {
         self.bounds = Self.makeBounds(layer)
     }
 
+//    func mapToFrame(_ gp: GeometryProxy,  _ pt: CGPoint) -> CGPoint {
+//
+//        let frame = gp.frame(in: .local)
+//        return CGPoint(x: frame.width  * (pt.x - bounds.minX)     / bounds.width   + frame.minX,
+//                       y: frame.height * (1 - pt.y + bounds.minY) / bounds.height  + frame.minY)
+//    }
+
     static func makeBounds(_ layer: XYLayer) -> XYRect {
         var bounds: XYRect? = nil
         for line in layer.lines {
@@ -239,13 +248,6 @@ public struct XYLayerView: View {
         else {
             return XYRect(x: 0, y: 0, width: 1, height: 1)
         }
-    }
-
-    func mapToFrame(_ gp: GeometryProxy,  _ pt: CGPoint, _ bounds: XYRect) -> CGPoint {
-
-        let frame = gp.frame(in: .local)
-        return CGPoint(x: frame.width  * (pt.x - bounds.minX)     / bounds.width   + frame.minX,
-                       y: frame.height * (1 - pt.y + bounds.minY) / bounds.height  + frame.minY)
     }
 
     static func makeDefaultStyles(_ dataSource: XYDataSource) -> [XYLineStyle] {
