@@ -73,6 +73,7 @@ public struct YAxisLabelsView: View {
 
     public var orderOfMagnitude: Int
 
+    let tickLength: CGFloat = 10
     let geometryReaderWidth: CGFloat = 30
 
     public var body: some View {
@@ -83,31 +84,39 @@ public struct YAxisLabelsView: View {
                     .lineLimit(1)
                     .rotated(by: .degrees(-90))
             }
-            // .border(UIConstants.darkGray)
 
             GeometryReader { geometry in
                 // TODO axis numbers
                 // TODO axis ticks
+                Text("B")
+                    .position(x: geometry.frame(in: .local).minX, y: geometry.frame(in: .local).minY)
+
                 Path {
                     path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).minY))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - 10, y: geometry.frame(in: .local).minY))
+                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).minY + 1))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).minY + 1))
                 }
-                .stroke(Color.green)
+                .stroke()
+
+                Text("M")
+                    .position(x: geometry.frame(in: .local).minX, y: geometry.frame(in: .local).midY)
 
                 Path {
                     path in
                     path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).midY))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - 10, y: geometry.frame(in: .local).midY))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).midY))
                 }
-                .stroke(Color.green)
+                .stroke()
 
+                Text("T")
+                    .position(x: geometry.frame(in: .local).minX, y: geometry.frame(in: .local).maxY)
+                
                 Path {
                     path in
-                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY))
-                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - 10, y: geometry.frame(in: .local).maxY))
+                    path.move(to: CGPoint(x: geometry.frame(in: .local).maxX, y: geometry.frame(in: .local).maxY - 1))
+                    path.addLine(to: CGPoint(x: geometry.frame(in: .local).maxX - tickLength, y: geometry.frame(in: .local).maxY - 1))
                 }
-                .stroke(Color.green)
+                .stroke()
 
             }
             .frame(minWidth: geometryReaderWidth, maxWidth: geometryReaderWidth, maxHeight: .infinity)
