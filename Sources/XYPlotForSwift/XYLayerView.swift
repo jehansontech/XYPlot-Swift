@@ -28,12 +28,6 @@ public struct XAxisLabelsView: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                // TODO axis numbers
-                Text("L")
-                Spacer()
-                Text("R")
-            }
             GeometryReader { geometry in
                 // TODO axis ticks
                 Path {
@@ -49,7 +43,17 @@ public struct XAxisLabelsView: View {
                     path.addLine(to: CGPoint(x: 1, y: -10))
                 }
                 .stroke(Color.blue)
-            }.border(Color.red)
+            }
+            // .border(Color.red)
+
+            HStack {
+                // TODO axis numbers
+                Text("L")
+                Spacer()
+                Text("R")
+            }
+            .foregroundColor(Color.clear)
+
             HStack {
                 Text(axisLabels.makeLabel(orderOfMagnitude))
                     .lineLimit(1)
@@ -86,6 +90,8 @@ public struct YAxisLabelsView: View {
                 Spacer()
                 Text("B")
             }
+            .foregroundColor(Color.clear)
+
             GeometryReader { geometry in
                 // TODO axis ticks
                 Path {
@@ -102,7 +108,8 @@ public struct YAxisLabelsView: View {
                 }
                 .stroke(Color.blue)
 
-            }.border(Color.red)
+            }
+            // .border(Color.red)
         }
         .frame(maxWidth: XYPlotConstants.yAxisLabelsWidth, maxHeight: .infinity)
     }
