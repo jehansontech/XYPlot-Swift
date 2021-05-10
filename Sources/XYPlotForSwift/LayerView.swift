@@ -9,7 +9,6 @@ import SwiftUI
 import Taconic
 import UIStuffForSwift
 
-
 public struct LayerView: View {
 
     public var layerInsets = EdgeInsets(top: XYPlotConstants.layerTopInset, leading: 0, bottom: 0, trailing: XYPlotConstants.yAxisLabelsWidth)
@@ -53,7 +52,6 @@ public struct LayerView: View {
                         .scaledBy(x: proxy.frame(in: .local).width / dataBounds.width,
                                   y: proxy.frame(in: .local).height / dataBounds.height)
                         .translatedBy(x: -dataBounds.minX, y: -dataBounds.minY)
-
 
                     ForEach(layer.lines.indices, id: \.self) { lineIdx in
                         let points = layer.lines[lineIdx].dataSet.points

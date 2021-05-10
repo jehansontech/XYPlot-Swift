@@ -46,8 +46,15 @@ public struct XAxisView: View {
 
             GeometryReader { proxy in
 
+                // XYLayer:
+                //                let dataTransform = CGAffineTransform(scaleX: 1, y: -1)
+                //                    .translatedBy(x: 0, y: -proxy.frame(in: .local).height)
+                //                    .scaledBy(x: proxy.frame(in: .local).width / dataBounds.width,
+                //                              y: proxy.frame(in: .local).height / dataBounds.height)
+                //                    .translatedBy(x: -dataBounds.minX, y: -dataBounds.minY)
+
                 let dataTransform = CGAffineTransform(scaleX: proxy.frame(in: .local).width / dataBounds.width, y: 1)
-                    .translatedBy(x: -dataBounds.minX, y: -dataBounds.minY)
+                    .translatedBy(x: -dataBounds.minX, y: 0)
 
                 ForEach(makeNumbers(), id: \.self) { n in
 
@@ -61,7 +68,7 @@ public struct XAxisView: View {
                     Text(formatter.string(for: n)!)
                         .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
                         .fixedSize()
-                        .position(CGPoint(x: multiplier * CGFloat(n), y: (proxy.frame(in: .local).minY  + XYPlotConstants.axisLabelCharHeight/2)).applying(dataTransform))
+                        .position(CGPoint(x: multiplier * CGFloat(n), y: (proxy.frame(in: .local).minY  + numberOffset(n))).applying(dataTransform))
                 }
             }
 
@@ -93,6 +100,10 @@ public struct XAxisView: View {
             numbers.append(max)
         }
         return numbers
+    }
+
+    func numberOffset(_ n: Int) -> CGFloat {
+        return XYPlotConstants.axisLabelCharHeight / 2
     }
 }
 
