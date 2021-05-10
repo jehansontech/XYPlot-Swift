@@ -164,7 +164,7 @@ public struct YAxisLabelsView: View {
     }
 
     func numberOffset(_ n: Int) -> CGFloat {
-        return CGFloat(n) * XYPlotConstants.axisLabelCharWidth
+        return XYPlotConstants.axisLabelCharWidth
     }
 }
 
@@ -201,6 +201,7 @@ public struct XYLayerView: View {
                 Spacer()
 
                 YAxisLabelsView($layer.yAxisLabels, $dataBounds) // centered w/r/t plot
+                    .clipped()
 
                 // ==================================================================
                 // Begin plot
@@ -226,11 +227,11 @@ public struct XYLayerView: View {
                             }
                             .applying(dataTransform)
                             .stroke(layer.lines[lineIdx].style.color)
-                            .clipped()
                         }
                     }
                 }
                 .background(UIConstants.trueBlack)
+                .clipped()
 
                 // End plot
                 // ==================================================================
@@ -246,6 +247,7 @@ public struct XYLayerView: View {
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
 
                 XAxisLabelsView($layer.xAxisLabels, $dataBounds) // centered w/r/t the plot
+                    .clipped()
             }
             // end HStack for x-axis labels
 
@@ -300,6 +302,11 @@ public struct XYLayerView: View {
         }
         return styles
     }
+}
+
+fileprivate func digitCount(_ n: Int) -> Int {
+    let c: Int = orderOfMagnitude(Double(abs(n)))
+    return (n >= 0) ? c : c + 1
 }
 
 fileprivate func getStride(_ delta: Int) -> Int{
