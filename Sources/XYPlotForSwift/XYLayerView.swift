@@ -197,11 +197,10 @@ public struct XYLayerView: View {
                 Spacer()
 
                 YAxisLabelsView($layer.yAxisLabels, $dataBounds) // centered w/r/t plot
-                //.clipped()
+                    .frame(width: XYPlotConstants.yAxisLabelsWidth)
+                    //.clipped()
 
-                // ==================================================================
                 // Begin plot
-
                 GeometryReader { proxy in
 
                     let dataTransform = CGAffineTransform(scaleX: 1, y: -1)
@@ -228,9 +227,7 @@ public struct XYLayerView: View {
                 }
                 .background(UIConstants.trueBlack)
                 .clipped()
-
                 // End plot
-                // ==================================================================
 
             }
             // end HStack for y-axis labels and plot
@@ -243,7 +240,8 @@ public struct XYLayerView: View {
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
 
                 XAxisLabelsView($layer.xAxisLabels, $dataBounds) // centered w/r/t the plot
-                //.clipped()
+                    .frame(height: XYPlotConstants.xAxisLabelsHeight)
+                    //.clipped()
             }
             // end HStack for x-axis labels
 
