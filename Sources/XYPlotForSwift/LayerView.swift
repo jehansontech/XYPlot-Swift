@@ -133,9 +133,22 @@ public struct LayerView: View {
             let minY2 = multiplierY * floor(trueBounds.minY / multiplierY)
             let maxY2 = multiplierY * ceil(trueBounds.maxY / multiplierY)
 
+            if (minX2 != trueBounds.minX) {
+                debug("LayerView: adjusted minX: \(trueBounds.minX) -> \(minX2)")
+            }
+            if (maxX2 != trueBounds.maxX) {
+                debug("LayerView: adjusted maxX: \(trueBounds.maxX) -> \(maxX2)")
+            }
+            if minY2 != trueBounds.minY {
+                debug("LayerView: adjusted minY: \(trueBounds.minY) -> \(minY2)")
+            }
+            if (maxY2 != trueBounds.maxY) {
+                debug("LayerView: adjusted maxY: \(trueBounds.maxY) -> \(maxY2)")
+            }
+
             return XYRect(x: minX2,
                           y: minY2,
-                          width: minX2 < maxX2 ? maxX2 - minX2: 1,
+                          width:  minX2 < maxX2 ? maxX2 - minX2 : 1,
                           height: minY2 < maxY2 ? maxY2 - minY2 : 1)
         }
         else {
