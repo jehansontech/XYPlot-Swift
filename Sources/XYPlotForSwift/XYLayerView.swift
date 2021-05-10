@@ -106,16 +106,14 @@ public struct YAxisLabelsView: View {
     }
 
     public var body: some View {
+
         HStack(spacing: 0) {
 
-            VStack {
-                Text(axisLabels.makeLabel(dataBounds.exponentY))
-                    .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
-                    .fixedSize()
-                    .lineLimit(1)
-                    .rotated(by: .degrees(-90))
-            }
-            .border(Color.gray)
+            Text(axisLabels.makeLabel(dataBounds.exponentY))
+                .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
+                .fixedSize()
+                .lineLimit(1)
+                .rotated(by: .degrees(-90))
 
             GeometryReader { proxy in
 
@@ -141,7 +139,7 @@ public struct YAxisLabelsView: View {
             }
             .border(Color.gray)
         }
-        .frame(maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     public init(_ axisLabels: Binding<AxisLabels>, _ dataBounds: Binding<XYRect>) {
