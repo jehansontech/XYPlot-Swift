@@ -89,6 +89,9 @@ public struct XAxisView: View {
         for n in stride(from: min, through: max, by: getStride(max - min)) {
             numbers.append(n)
         }
+        if numbers[numbers.count-1] < max {
+            numbers.append(max)
+        }
         return numbers
     }
 }
@@ -154,6 +157,9 @@ public struct YAxisView: View {
         let max: Int = Int(ceil(dataBounds.maxY / multiplier))
         for n in stride(from: min, through: max, by: getStride(max - min)) {
             numbers.append(n)
+        }
+        if numbers[numbers.count-1] < max {
+            numbers.append(max)
         }
         return numbers
     }
