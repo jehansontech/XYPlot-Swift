@@ -31,41 +31,106 @@ extension XYRect {
 
 public struct XAxisLabelsView: View {
 
+    let formatter: NumberFormatter
+
     @Binding var axisLabels: AxisLabels
 
     @Binding var dataBounds: XYRect
 
+    var numbers: [Int] {
+        return makeNumbers()
+    }
+
+    var fmultiplier: CGFloat {
+        return CGFloat(multiplier)
+    }
+
+    var multiplier: Double {
+        return pow(10,Double(dataBounds.exponentX))
+    }
+
     public var body: some View {
         VStack(spacing: 0) {
 
-            // TODO ticks and numbers
-            
+            GeometryReader { proxy in
+
+                let dataTransform = CGAffineTransform(scaleX: proxy.frame(in: .local).width / dataBounds.width, y: 1)
+                    .translatedBy(x: -dataBounds.minX, y: -dataBounds.minY)
+
+                ForEach(numbers, id: \.self) { n in
+
+                    Path { path in
+                        path.move(to:    CGPoint(x: fmultiplier * CGFloat(n), y: proxy.frame(in: .local).minY))
+                        path.addLine(to: CGPoint(x: fmultiplier * CGFloat(n), y: proxy.frame(in: .local).minY + XYPlotConstants.tickLength))
+                    }
+                    .applying(dataTransform)
+                    .stroke()
+
+                    Text(formatter.string(for: n)!)
+                        .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
+                        .fixedSize()
+                        .position(CGPoint(x: fmultiplier * CGFloat(n), y: (proxy.frame(in: .local).minY  + XYPlotConstants.axisLabelCharHeight)).applying(dataTransform))
+                }
+            }
+
             HStack {
                 Text(axisLabels.makeLabel(dataBounds.exponentX))
-                    .lineLimit(1)
                     .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
+                    .fixedSize()
+                    .lineLimit(1)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: XYPlotConstants.xAxisLabelsHeight)
     }
 
     public init(_ axisLabels: Binding<AxisLabels>, _ dataBounds: Binding<XYRect>) {
+        self.formatter = NumberFormatter()
+        self.formatter.numberStyle = .none
         self._axisLabels = axisLabels
         self._dataBounds = dataBounds
     }
+
+    func makeNumbers() -> [Int] {
+        var numbers = [Int]()
+        let min: Int = Int(floor(dataBounds.minX / fmultiplier))
+        let max: Int = Int(ceil(dataBounds.maxX / fmultiplier))
+        for n in stride(from: min, through: max, by: getStride(max - min)) {
+            numbers.append(n)
+        }
+        return numbers
+    }
+
+
 }
 
 public struct YAxisLabelsView: View {
 
+    let formatter: NumberFormatter
+
     @Binding var axisLabels: AxisLabels
 
     @Binding var dataBounds: XYRect
+
+    var numbers: [Int] {
+        return makeNumbers()
+    }
+
+    var fmultiplier: CGFloat {
+        return CGFloat(multiplier)
+    }
+
+    var multiplier: Double {
+        return pow(10,Double(dataBounds.exponentY))
+    }
+
 
     public var body: some View {
         HStack(spacing: 0) {
 
             VStack {
                 Text(axisLabels.makeLabel(dataBounds.exponentY))
+                    .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
+                    .fixedSize()
                     .lineLimit(1)
                     .rotated(by: .degrees(-90))
             }
@@ -77,9 +142,22 @@ public struct YAxisLabelsView: View {
     }
 
     public init(_ axisLabels: Binding<AxisLabels>, _ dataBounds: Binding<XYRect>) {
+        self.formatter = NumberFormatter()
+        self.formatter.numberStyle = .none
         self._axisLabels = axisLabels
         self._dataBounds = dataBounds
     }
+
+    func makeNumbers() -> [Int] {
+        var numbers = [Int]()
+        let min: Int = Int(floor(dataBounds.minY / fmultiplier))
+        let max: Int = Int(ceil(dataBounds.maxY / fmultiplier))
+        for n in stride(from: min, through: max, by: getStride(max - min)) {
+            numbers.append(n)
+        }
+        return numbers
+    }
+
 }
 
 
@@ -114,11 +192,10 @@ public struct XYLayerView: View {
 
                 Spacer()
 
-                // y-axis names needs to be centered w/r/t GeometryReader
-                YAxisLabelsView($layer.yAxisLabels, $dataBounds)
+                YAxisLabelsView($layer.yAxisLabels, $dataBounds) // centered w/r/t plot
 
                 // ==================================================================
-                // Begin the plot
+                // Begin plot
 
                 GeometryReader { proxy in
 
@@ -147,7 +224,7 @@ public struct XYLayerView: View {
                 }
                 .background(UIConstants.trueBlack)
 
-                // End the plot
+                // End plot
                 // ==================================================================
 
             }
@@ -160,18 +237,18 @@ public struct XYLayerView: View {
                 Spacer()
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
 
-                // x-axis label needs to be centered w.r.t GeometryReader
-                XAxisLabelsView($layer.xAxisLabels, $dataBounds)
+                XAxisLabelsView($layer.xAxisLabels, $dataBounds) // centered w/r/t the plot
             }
             // end HStack for x-axis labels
 
             // begin HStack for caption
             HStack(spacing: 0) {
 
+                // TODO legend: name and color for each line
+
                 Spacer()
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
 
-                // Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in malesuada augue. Maecenas sed ante lorem. Vivamus in quam in lacus tincidunt volutpat ac ac justo. Nullam ornare vehicula quam, ac molestie velit fringilla sit amet. Donec quis dignissim risus, vel hendrerit magna. Vivamus vitae ornare justo, sit amet auctor diam. Quisque at tellus risus. Mauris nisi leo, ornare at sapien ac, mollis sodales lectus. Aliquam efficitur nec dolor laoreet imperdiet. In vehicula odio velit. Donec rutrum aliquam enim ac iaculis. Nullam vel nibh purus.")
             }
             .frame(maxWidth: .infinity, minHeight: XYPlotConstants.captionHeight)
             // end HStack for caption
@@ -214,6 +291,21 @@ public struct XYLayerView: View {
             styles.append(XYLineStyle())
         }
         return styles
+    }
+}
+
+fileprivate func getStride(_ delta: Int) -> Int{
+    if delta > 50 {
+        return 10
+    }
+    else if delta > 20 {
+        return 5
+    }
+    else if delta > 10 {
+        return 2
+    }
+    else {
+        return 1
     }
 }
 
