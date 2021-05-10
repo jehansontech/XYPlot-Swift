@@ -76,11 +76,11 @@ public struct LayerView: View {
             // begin HStack for x-axis labels
             HStack(spacing: 0) {
 
-                // bottom left corner
+                // so it'll be centered under the plot
                 Spacer()
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
 
-                XAxisView($layer.xAxisLabels, $dataBounds) // centered w/r/t the plot
+                XAxisView($layer.xAxisLabels, $dataBounds)
                     .frame(height: XYPlotConstants.xAxisLabelsHeight)
                     //.clipped()
             }
@@ -89,10 +89,11 @@ public struct LayerView: View {
             // begin HStack for caption
             HStack(spacing: 0) {
 
-                // TODO legend: name and color for each line
-
+                // so it'll be centered under the plot
                 Spacer()
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
+
+                // TODO legend: name and color for each line
 
             }
             .frame(maxWidth: .infinity, minHeight: XYPlotConstants.captionHeight)

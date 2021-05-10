@@ -10,28 +10,24 @@ import UIStuffForSwift
 
 struct XYPlotConstants {
 
-    static let layerTopInset: CGFloat = UIConstants.symbolButtonHeight
-    
-    static let titleHeight: CGFloat = 60
+    // EMPIRICAL
+    static let axisLabelCharHeight: CGFloat = 30
+
+    // EMPIRICAL
+    static let axisLabelCharWidth: CGFloat = 10
+
+    static let axisLabelFontSize: CGFloat = 15
+
+    static let axisTickLength: CGFloat = 10
 
     static let captionHeight: CGFloat = 120
+
+    static let layerTopInset: CGFloat = UIConstants.symbolButtonHeight
+
+    static let titleHeight: CGFloat = 60
 
     static let xAxisLabelsHeight: CGFloat = 60
 
     static let yAxisLabelsWidth: CGFloat = 60
-
-    static let axisLabelFontSize: CGFloat = 15
-
-    // EMPIRICAL
-    static let axisLabelCharHeight: CGFloat = 40
-
-    // EMPIRICAL
-    static let axisLabelCharWidth: CGFloat = 20
-
-    static let xAxisTickLength: CGFloat = 10
-
-    static let yAxisTickLength: CGFloat = 10
-
-
 }
 

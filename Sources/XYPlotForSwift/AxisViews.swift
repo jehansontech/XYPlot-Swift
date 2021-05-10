@@ -60,7 +60,7 @@ public struct XAxisView: View {
 
                     Path { path in
                         path.move(to:    CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY))
-                        path.addLine(to: CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY + XYPlotConstants.xAxisTickLength))
+                        path.addLine(to: CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY + XYPlotConstants.axisTickLength))
                     }
                     .applying(dataTransform)
                     .stroke()
@@ -68,7 +68,7 @@ public struct XAxisView: View {
                     Text(formatter.string(for: n)!)
                         .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
                         .fixedSize()
-                        .position(CGPoint(x: multiplier * CGFloat(n), y: (proxy.frame(in: .local).minY  + numberOffset(n))).applying(dataTransform))
+                        .position(CGPoint(x: multiplier * CGFloat(n), y: (proxy.frame(in: .local).minY + XYPlotConstants.axisTickLength + numberOffset(n))).applying(dataTransform))
                 }
             }
 
@@ -141,11 +141,11 @@ public struct YAxisView: View {
                     Text(formatter.string(for: n)!)
                         .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
                         .fixedSize()
-                        .position(CGPoint(x: proxy.frame(in: .local).maxX - numberOffset(n), y: multiplier * CGFloat(n)).applying(dataTransform))
+                        .position(CGPoint(x: proxy.frame(in: .local).maxX - XYPlotConstants.axisTickLength - numberOffset(n), y: multiplier * CGFloat(n)).applying(dataTransform))
 
                     Path { path in
                         path.move(to: CGPoint(x: proxy.frame(in: .local).maxX, y: multiplier * CGFloat(n)))
-                        path.addLine(to: CGPoint(x: proxy.frame(in: .local).maxX - XYPlotConstants.yAxisTickLength, y: multiplier * CGFloat(n)))
+                        path.addLine(to: CGPoint(x: proxy.frame(in: .local).maxX - XYPlotConstants.axisTickLength, y: multiplier * CGFloat(n)))
                     }
                     .applying(dataTransform)
                     .stroke()
