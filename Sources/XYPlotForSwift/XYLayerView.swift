@@ -37,16 +37,8 @@ public struct XAxisLabelsView: View {
 
     @Binding var dataBounds: XYRect
 
-    var numbers: [Int] {
-        return makeNumbers()
-    }
-
-    var fmultiplier: CGFloat {
-        return CGFloat(multiplier)
-    }
-
-    var multiplier: Double {
-        return pow(10,Double(dataBounds.exponentX))
+    var multiplier: CGFloat {
+        return CGFloat(pow(10,Double(dataBounds.exponentX)))
     }
 
     public var body: some View {
@@ -57,11 +49,11 @@ public struct XAxisLabelsView: View {
                 let dataTransform = CGAffineTransform(scaleX: proxy.frame(in: .local).width / dataBounds.width, y: 1)
                     .translatedBy(x: -dataBounds.minX, y: -dataBounds.minY)
 
-                ForEach(numbers, id: \.self) { n in
+                ForEach(makeNumbers(), id: \.self) { n in
 
                     Path { path in
-                        path.move(to:    CGPoint(x: fmultiplier * CGFloat(n), y: proxy.frame(in: .local).minY))
-                        path.addLine(to: CGPoint(x: fmultiplier * CGFloat(n), y: proxy.frame(in: .local).minY + XYPlotConstants.tickLength))
+                        path.move(to:    CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY))
+                        path.addLine(to: CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY + XYPlotConstants.tickLength))
                     }
                     .applying(dataTransform)
                     .stroke()
@@ -69,7 +61,7 @@ public struct XAxisLabelsView: View {
                     Text(formatter.string(for: n)!)
                         .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
                         .fixedSize()
-                        .position(CGPoint(x: fmultiplier * CGFloat(n), y: (proxy.frame(in: .local).minY  + XYPlotConstants.axisLabelCharHeight)).applying(dataTransform))
+                        .position(CGPoint(x: multiplier * CGFloat(n), y: (proxy.frame(in: .local).minY  + XYPlotConstants.axisLabelCharHeight)).applying(dataTransform))
                 }
             }
 
@@ -92,15 +84,13 @@ public struct XAxisLabelsView: View {
 
     func makeNumbers() -> [Int] {
         var numbers = [Int]()
-        let min: Int = Int(floor(dataBounds.minX / fmultiplier))
-        let max: Int = Int(ceil(dataBounds.maxX / fmultiplier))
+        let min: Int = Int(floor(dataBounds.minX / multiplier))
+        let max: Int = Int(ceil(dataBounds.maxX / multiplier))
         for n in stride(from: min, through: max, by: getStride(max - min)) {
             numbers.append(n)
         }
         return numbers
     }
-
-
 }
 
 public struct YAxisLabelsView: View {
@@ -111,18 +101,9 @@ public struct YAxisLabelsView: View {
 
     @Binding var dataBounds: XYRect
 
-    var numbers: [Int] {
-        return makeNumbers()
+    var multiplier: CGFloat {
+        return CGFloat(pow(10,Double(dataBounds.exponentY)))
     }
-
-    var fmultiplier: CGFloat {
-        return CGFloat(multiplier)
-    }
-
-    var multiplier: Double {
-        return pow(10,Double(dataBounds.exponentY))
-    }
-
 
     public var body: some View {
         HStack(spacing: 0) {
@@ -135,7 +116,31 @@ public struct YAxisLabelsView: View {
                     .rotated(by: .degrees(-90))
             }
 
-            // TODO numbers and ticks
+            GeometryReader { proxy in
+
+                let dataTransform = CGAffineTransform
+                    .identity
+                    .scaledBy(x: 1, y: -1)
+                    .translatedBy(x: 0, y: -proxy.frame(in: .local).height)
+                    .scaledBy(x: 1,
+                              y: proxy.frame(in: .local).height / dataBounds.height)
+                    .translatedBy(x: 0, y: -dataBounds.minY)
+
+                ForEach(makeNumbers(), id: \.self) { n in
+
+                    Text(formatter.string(for: n)!)
+                        .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
+                        .fixedSize()
+                        .position(CGPoint(x: proxy.frame(in: .local).maxX - numberOffset(n), y: multiplier * CGFloat(n)).applying(dataTransform))
+
+                    Path { path in
+                        path.move(to: CGPoint(x: proxy.frame(in: .local).maxX, y: multiplier * CGFloat(n)))
+                        path.addLine(to: CGPoint(x: proxy.frame(in: .local).maxX - XYPlotConstants.tickLength, y: multiplier * CGFloat(n)))
+                    }
+                    .applying(dataTransform)
+                    .stroke()
+                }
+            }
 
         }
         .frame(maxHeight: .infinity)
@@ -150,14 +155,17 @@ public struct YAxisLabelsView: View {
 
     func makeNumbers() -> [Int] {
         var numbers = [Int]()
-        let min: Int = Int(floor(dataBounds.minY / fmultiplier))
-        let max: Int = Int(ceil(dataBounds.maxY / fmultiplier))
+        let min: Int = Int(floor(dataBounds.minY / multiplier))
+        let max: Int = Int(ceil(dataBounds.maxY / multiplier))
         for n in stride(from: min, through: max, by: getStride(max - min)) {
             numbers.append(n)
         }
         return numbers
     }
 
+    func numberOffset(_ n: Int) -> CGFloat {
+        return CGFloat(n) * XYPlotConstants.axisLabelCharWidth
+    }
 }
 
 
