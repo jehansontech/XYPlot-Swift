@@ -60,7 +60,7 @@ public struct XAxisView: View {
 
                     Path { path in
                         path.move(to:    CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY))
-                        path.addLine(to: CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY + XYPlotConstants.tickLength))
+                        path.addLine(to: CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY + XYPlotConstants.xAxisTickLength))
                     }
                     .applying(dataTransform)
                     .stroke()
@@ -145,7 +145,7 @@ public struct YAxisView: View {
 
                     Path { path in
                         path.move(to: CGPoint(x: proxy.frame(in: .local).maxX, y: multiplier * CGFloat(n)))
-                        path.addLine(to: CGPoint(x: proxy.frame(in: .local).maxX - XYPlotConstants.tickLength, y: multiplier * CGFloat(n)))
+                        path.addLine(to: CGPoint(x: proxy.frame(in: .local).maxX - XYPlotConstants.yAxisTickLength, y: multiplier * CGFloat(n)))
                     }
                     .applying(dataTransform)
                     .stroke()

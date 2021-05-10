@@ -28,8 +28,9 @@ struct XYPlotConstants {
     // EMPIRICAL
     static let axisLabelCharWidth: CGFloat = 20
 
-    static let tickLength: CGFloat = 1
+    static let xAxisTickLength: CGFloat = 10
 
+    static let yAxisTickLength: CGFloat = 10
 
 
 }
