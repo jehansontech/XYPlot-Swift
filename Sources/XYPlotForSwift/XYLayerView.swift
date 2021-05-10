@@ -61,7 +61,7 @@ public struct XAxisLabelsView: View {
                     Text(formatter.string(for: n)!)
                         .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
                         .fixedSize()
-                        .position(CGPoint(x: multiplier * CGFloat(n), y: (proxy.frame(in: .local).minY  + XYPlotConstants.axisLabelCharHeight)).applying(dataTransform))
+                        .position(CGPoint(x: multiplier * CGFloat(n), y: (proxy.frame(in: .local).minY  + XYPlotConstants.axisLabelCharHeight/2)).applying(dataTransform))
                 }
             }
 
@@ -137,7 +137,6 @@ public struct YAxisLabelsView: View {
                     .stroke()
                 }
             }
-            .border(Color.gray)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -160,7 +159,8 @@ public struct YAxisLabelsView: View {
     }
 
     func numberOffset(_ n: Int) -> CGFloat {
-        return XYPlotConstants.axisLabelCharWidth
+        // TODO
+        return XYPlotConstants.axisLabelCharWidth / 2
     }
 }
 
@@ -266,23 +266,34 @@ public struct XYLayerView: View {
     }
 
     static func makeBounds(_ layer: XYLayer) -> XYRect {
-        var bounds: XYRect? = nil
+        var trueBounds: XYRect? = nil
         for line in layer.lines {
             if let b2 = line.dataSet.bounds {
-                if let oldBounds = bounds {
-                    bounds = oldBounds.union(b2)
+                if let oldBounds = trueBounds {
+                    trueBounds = oldBounds.union(b2)
                 }
                 else {
-                    bounds = b2
+                    trueBounds = b2
                 }
             }
         }
 
-        if let bounds = bounds {
-            return XYRect(x: bounds.minX,
-                          y: bounds.minY,
-                          width: bounds.width > 0 ? bounds.width : 1,
-                          height: bounds.height > 0 ? bounds.height : 1)
+        if let trueBounds = trueBounds {
+
+            // Expand them so that axis numbers look good
+
+            let multiplierX = CGFloat(pow(10, Double(trueBounds.exponentX)))
+            let minX2 = multiplierX * floor(trueBounds.minX / multiplierX)
+            let maxX2 = multiplierX * ceil(trueBounds.maxX / multiplierX)
+
+            let multiplierY = CGFloat(pow(10, Double(trueBounds.exponentY)))
+            let minY2 = multiplierY * floor(trueBounds.minY / multiplierY)
+            let maxY2 = multiplierY * ceil(trueBounds.maxY / multiplierY)
+
+            return XYRect(x: minX2,
+                          y: minY2,
+                          width: minX2 < maxX2 ? maxX2 - minX2: 1,
+                          height: minY2 < maxY2 ? maxY2 - minY2 : 1)
         }
         else {
             return XYRect(x: 0, y: 0, width: 1, height: 1)

@@ -23,10 +23,10 @@ struct XYPlotConstants {
     static let axisLabelFontSize: CGFloat = 15
 
     // EMPIRICAL
-    static let axisLabelCharHeight: CGFloat = 20
+    static let axisLabelCharHeight: CGFloat = 40
 
     // EMPIRICAL
-    static let axisLabelCharWidth: CGFloat = 10
+    static let axisLabelCharWidth: CGFloat = 20
 
     static let tickLength: CGFloat = 10
 
