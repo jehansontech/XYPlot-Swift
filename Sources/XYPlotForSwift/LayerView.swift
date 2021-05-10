@@ -38,8 +38,6 @@ public struct LayerView: View {
             // begin HStack for y-axis labels and plot
             HStack(spacing: 0) {
 
-                Spacer()
-
                 YAxisView($layer.yAxisLabels, $dataBounds) // centered w/r/t plot
                     .frame(width: XYPlotConstants.yAxisLabelsWidth)
                     //.clipped()
@@ -69,7 +67,7 @@ public struct LayerView: View {
                     }
                 }
                 .background(UIConstants.trueBlack)
-                .clipped()
+                // .clipped()
                 // End plot
 
             }
