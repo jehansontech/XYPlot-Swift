@@ -115,15 +115,13 @@ public struct YAxisLabelsView: View {
                     .lineLimit(1)
                     .rotated(by: .degrees(-90))
             }
+            .border(Color.gray)
 
             GeometryReader { proxy in
 
-                let dataTransform = CGAffineTransform
-                    .identity
-                    .scaledBy(x: 1, y: -1)
+                let dataTransform = CGAffineTransform(scaleX: 1, y: -1)
                     .translatedBy(x: 0, y: -proxy.frame(in: .local).height)
-                    .scaledBy(x: 1,
-                              y: proxy.frame(in: .local).height / dataBounds.height)
+                    .scaledBy(x: 1, y: proxy.frame(in: .local).height / dataBounds.height)
                     .translatedBy(x: 0, y: -dataBounds.minY)
 
                 ForEach(makeNumbers(), id: \.self) { n in
@@ -141,7 +139,7 @@ public struct YAxisLabelsView: View {
                     .stroke()
                 }
             }
-
+            .border(Color.gray)
         }
         .frame(maxHeight: .infinity)
     }
@@ -201,7 +199,7 @@ public struct XYLayerView: View {
                 Spacer()
 
                 YAxisLabelsView($layer.yAxisLabels, $dataBounds) // centered w/r/t plot
-                    .clipped()
+                //.clipped()
 
                 // ==================================================================
                 // Begin plot
@@ -247,7 +245,7 @@ public struct XYLayerView: View {
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
 
                 XAxisLabelsView($layer.xAxisLabels, $dataBounds) // centered w/r/t the plot
-                    .clipped()
+                //.clipped()
             }
             // end HStack for x-axis labels
 
