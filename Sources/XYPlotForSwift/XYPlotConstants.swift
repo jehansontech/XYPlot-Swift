@@ -11,7 +11,7 @@ import UIStuffForSwift
 struct XYPlotConstants {
 
     // EMPIRICAL
-    static let axisLabelCharHeight: CGFloat = 30
+    static let axisLabelCharHeight: CGFloat = 20
 
     // EMPIRICAL
     static let axisLabelCharWidth: CGFloat = 10
