@@ -305,8 +305,19 @@ public struct XYLayerView: View {
 }
 
 fileprivate func digitCount(_ n: Int) -> Int {
-    let c: Int = orderOfMagnitude(Double(abs(n)))
-    return (n >= 0) ? c : c + 1
+    var count = (n < 0) ? 1 : 0
+
+    let n2 = abs(n)
+    if (n2 < 10) {
+        count += 1
+    }
+    else if (n2 < 100) {
+        count += 2
+    }
+    else {
+        count += 3
+    }
+    return count
 }
 
 fileprivate func getStride(_ delta: Int) -> Int{
