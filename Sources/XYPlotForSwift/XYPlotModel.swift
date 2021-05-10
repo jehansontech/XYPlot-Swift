@@ -24,27 +24,27 @@ public struct AxisLabels {
         self.units = units
     }
 
-    func makeLabel(_ orderOfMagnitude: Int) -> String {
+    func makeLabel(_ exponent: Int) -> String {
         if let units = units {
-            if orderOfMagnitude == 0 {
+            if exponent == 0 {
                 return "\(name) (\(units))"
             }
-            else if orderOfMagnitude == 1 {
+            else if exponent == 1 {
                 return "\(name) (\(units) x 10)"
             }
             else {
-                return "\(name) (\(units) x 10^\(orderOfMagnitude))"
+                return "\(name) (\(units) x 10^\(exponent))"
             }
         }
         else {
-            if orderOfMagnitude == 0 {
+            if exponent == 0 {
                 return name
             }
-            else if orderOfMagnitude == 1 {
-                return "\(name) (x10)"
+            else if exponent == 1 {
+                return "\(name) (x 10)"
             }
             else {
-                return "\(name) (x10^\(orderOfMagnitude))"
+                return "\(name) (x 10^\(exponent))"
             }
         }
     }

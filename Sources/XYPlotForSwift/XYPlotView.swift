@@ -25,7 +25,7 @@ public struct XYPlotView: View {
 
             ForEach(model.layers.indices, id: \.self) { idx in
                 if (model.layers[idx].showing) {
-                    XYLayerView(model.layers[idx])
+                    XYLayerView($model.layers[idx])
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }

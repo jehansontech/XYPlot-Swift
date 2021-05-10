@@ -6,25 +6,34 @@
 //
 
 import SwiftUI
+import Taconic
 import UIStuffForSwift
 
 extension XYRect {
 
-    func mapToFrame(_ gp: GeometryProxy,  _ pt: CGPoint) -> CGPoint {
-        let frame = gp.frame(in: .local)
-        return CGPoint(x: frame.width  * (pt.x - self.minX)     / self.width   + frame.minX,
-                       y: frame.height * (1 - pt.y + self.minY) / self.height  + frame.minY)
+    var exponentX: Int {
+        let m1 = orderOfMagnitude(Double(minX))
+        let m2 = orderOfMagnitude(Double(maxX))
+        let m3 = orderOfMagnitude(Double(width))
+        let max = max(max(m1, m2), m3)
+        return max - 1
     }
 
+    var exponentY: Int {
+        let m1 = orderOfMagnitude(Double(minY))
+        let m2 = orderOfMagnitude(Double(maxY))
+        let m3 = orderOfMagnitude(Double(height))
+        let max = max(max(m1, m2), m3)
+        return max - 1
+    }
 }
+
 
 public struct XAxisLabelsView: View {
 
-    public var axisLabels: AxisLabels
+    @Binding var axisLabels: AxisLabels
 
-    public var bounds: XYRect
-
-    public var orderOfMagnitude: Int
+    @Binding var dataBounds: XYRect
 
     public var body: some View {
         VStack(spacing: 0) {
@@ -32,61 +41,55 @@ public struct XAxisLabelsView: View {
             // TODO ticks and numbers
             
             HStack {
-                Text(axisLabels.makeLabel(orderOfMagnitude))
+                Text(axisLabels.makeLabel(dataBounds.exponentX))
                     .lineLimit(1)
+                    .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: XYPlotConstants.xAxisLabelsHeight)
     }
 
-    public init(_ axisLabels: AxisLabels, _ bounds: XYRect, _ orderOfMagnitude: Int) {
-        self.axisLabels = axisLabels
-        self.bounds = bounds
-        self.orderOfMagnitude = orderOfMagnitude
+    public init(_ axisLabels: Binding<AxisLabels>, _ dataBounds: Binding<XYRect>) {
+        self._axisLabels = axisLabels
+        self._dataBounds = dataBounds
     }
 }
 
 public struct YAxisLabelsView: View {
 
-    public var axisLabels: AxisLabels
+    @Binding var axisLabels: AxisLabels
 
-    public var bounds: XYRect
-
-    public var orderOfMagnitude: Int
+    @Binding var dataBounds: XYRect
 
     public var body: some View {
         HStack(spacing: 0) {
 
             VStack {
-                Text(axisLabels.makeLabel(orderOfMagnitude))
+                Text(axisLabels.makeLabel(dataBounds.exponentY))
                     .lineLimit(1)
                     .rotated(by: .degrees(-90))
             }
 
             // TODO numbers and ticks
+
         }
         .frame(maxHeight: .infinity)
     }
 
-    public init(_ axisLabels: AxisLabels, _ bounds: XYRect, _ orderOfMagnitude: Int) {
-        self.axisLabels = axisLabels
-        self.bounds = bounds
-        self.orderOfMagnitude = orderOfMagnitude
+    public init(_ axisLabels: Binding<AxisLabels>, _ dataBounds: Binding<XYRect>) {
+        self._axisLabels = axisLabels
+        self._dataBounds = dataBounds
     }
 }
+
 
 public struct XYLayerView: View {
 
     public var layerInsets = EdgeInsets(top: XYPlotConstants.layerTopInset, leading: 0, bottom: 0, trailing: XYPlotConstants.yAxisLabelsWidth)
 
-    public let layer: XYLayer
+    @Binding private var layer: XYLayer
 
-    public let bounds: XYRect
-
-    var xAxisOrderOfMagnitude: Int = 0
-
-    var yAxisOrderOfMagnitude: Int = 0
-
+    @State private var dataBounds = XYRect()
 
     public var body: some View {
 
@@ -112,23 +115,31 @@ public struct XYLayerView: View {
                 Spacer()
 
                 // y-axis names needs to be centered w/r/t GeometryReader
-                YAxisLabelsView(layer.yAxisLabels, bounds, yAxisOrderOfMagnitude)
+                YAxisLabelsView($layer.yAxisLabels, $dataBounds)
 
                 // ==================================================================
                 // Begin the plot
 
-                GeometryReader { geometry in
+                GeometryReader { proxy in
+
+                    let dataTransform = CGAffineTransform(scaleX: 1, y: -1)
+                        .translatedBy(x: 0, y: -proxy.frame(in: .local).height)
+                        .scaledBy(x: proxy.frame(in: .local).width / dataBounds.width,
+                                  y: proxy.frame(in: .local).height / dataBounds.height)
+                        .translatedBy(x: -dataBounds.minX, y: -dataBounds.minY)
+
 
                     ForEach(layer.lines.indices, id: \.self) { lineIdx in
                         let points = layer.lines[lineIdx].dataSet.points
                         if points.count > 0 {
 
                             Path { path in
-                                path.move(to: bounds.mapToFrame(geometry, points[0]))
+                                path.move(to: points[0])
                                 for j in 1..<points.count {
-                                    path.addLine(to: bounds.mapToFrame(geometry, points[j]))
+                                    path.addLine(to: points[j])
                                 }
                             }
+                            .applying(dataTransform)
                             .stroke(layer.lines[lineIdx].style.color)
                             .clipped()
                         }
@@ -150,7 +161,7 @@ public struct XYLayerView: View {
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
 
                 // x-axis label needs to be centered w.r.t GeometryReader
-                XAxisLabelsView(layer.xAxisLabels, bounds, xAxisOrderOfMagnitude)
+                XAxisLabelsView($layer.xAxisLabels, $dataBounds)
             }
             // end HStack for x-axis labels
 
@@ -168,9 +179,9 @@ public struct XYLayerView: View {
         .padding(layerInsets)
     }
 
-    public init(_ layer: XYLayer) {
-        self.layer = layer
-        self.bounds = Self.makeBounds(layer)
+    public init(_ layer: Binding<XYLayer>) {
+        self._layer = layer
+        self._dataBounds = State(initialValue: Self.makeBounds(layer.wrappedValue))
     }
 
     static func makeBounds(_ layer: XYLayer) -> XYRect {

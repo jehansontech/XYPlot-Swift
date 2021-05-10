@@ -20,5 +20,7 @@ struct XYPlotConstants {
 
     static let yAxisLabelsWidth: CGFloat = 60
 
+    static let axisLabelFontSize: CGFloat = 15
+
 }
 
