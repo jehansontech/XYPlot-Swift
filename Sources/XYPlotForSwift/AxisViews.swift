@@ -12,17 +12,17 @@ import WacomaUI
 extension XYRect {
 
     var exponentX: Int {
-        let m1 = orderOfMagnitude(Double(minX))
-        let m2 = orderOfMagnitude(Double(maxX))
-        let m3 = orderOfMagnitude(Double(width))
+        let m1 = Double.orderOfMagnitude(Double(minX))
+        let m2 = Double.orderOfMagnitude(Double(maxX))
+        let m3 = Double.orderOfMagnitude(Double(width))
         let max = max(max(m1, m2), m3)
         return max - 1
     }
 
     var exponentY: Int {
-        let m1 = orderOfMagnitude(Double(minY))
-        let m2 = orderOfMagnitude(Double(maxY))
-        let m3 = orderOfMagnitude(Double(height))
+        let m1 = Double.orderOfMagnitude(Double(minY))
+        let m2 = Double.orderOfMagnitude(Double(maxY))
+        let m3 = Double.orderOfMagnitude(Double(height))
         let max = max(max(m1, m2), m3)
         return max - 1
     }
