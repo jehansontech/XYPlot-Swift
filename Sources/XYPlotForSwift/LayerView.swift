@@ -9,6 +9,7 @@ import SwiftUI
 import Taconic
 import UIStuffForSwift
 
+
 public struct LayerView: View {
 
     public var layerInsets = EdgeInsets(top: XYPlotConstants.layerTopInset, leading: 0, bottom: 0, trailing: XYPlotConstants.yAxisLabelsWidth)
@@ -21,91 +22,33 @@ public struct LayerView: View {
 
         VStack(spacing: 0) {
 
-            // begin HStack for title
             HStack(spacing: 0) {
-
-                // top right corner
                 Spacer()
-                    .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
-
-                // title needs to be centered over GeometryReader
+                    .frame(width: XYPlotConstants.yAxisLabelsWidth)
                 Text(layer.title)
                     .font(.headline)
             }
             .frame(maxWidth: .infinity, minHeight: XYPlotConstants.titleHeight)
-            // end HStack for title
 
-            // begin HStack for y-axis labels and plot
             HStack(spacing: 0) {
-
-                YAxisView($layer.yAxisLabels, $dataBounds) // centered w/r/t plot
+                YAxisView($layer.yAxisLabels, $dataBounds)
                     .frame(width: XYPlotConstants.yAxisLabelsWidth)
-                    //.clipped()
-
-                // Begin plot
-                GeometryReader { proxy in
-
-                    let dataTransform = CGAffineTransform(scaleX: 1, y: -1)
-                        .translatedBy(x: 0, y: -proxy.frame(in: .local).height)
-                        .scaledBy(x: proxy.frame(in: .local).width / dataBounds.width,
-                                  y: proxy.frame(in: .local).height / dataBounds.height)
-                        .translatedBy(x: -dataBounds.minX, y: -dataBounds.minY)
-
-                    ForEach(layer.lines.indices, id: \.self) { lineIdx in
-                        let points = layer.lines[lineIdx].dataSet.points
-                        if points.count > 0 {
-
-                            Path { path in
-                                path.move(to: points[0])
-                                for j in 1..<points.count {
-                                    path.addLine(to: points[j])
-                                }
-                            }
-                            .applying(dataTransform)
-                            .stroke(layer.lines[lineIdx].style.color)
-                        }
-                    }
-                }
-                .background(UIConstants.trueBlack)
-                // .clipped()
-                // End plot
-
+                LayerLinesView($layer, $dataBounds)
             }
-            // end HStack for y-axis labels and plot
 
-            // begin HStack for x-axis labels
             HStack(spacing: 0) {
-
-                // so it'll be centered under the plot
                 Spacer()
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
-
                 XAxisView($layer.xAxisLabels, $dataBounds)
                     .frame(height: XYPlotConstants.xAxisLabelsHeight)
-                    //.clipped()
             }
-            // end HStack for x-axis labels
 
-            // begin HStack fo"r caption
             HStack(spacing: 0) {
-
-                // so it'll be centered under the plot
                 Spacer()
-                    .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
-
-                VStack {
-                    ForEach(layer.lines.indices, id: \.self) { lineIdx in
-                        HStack {
-                            Rectangle()
-                                .fill(layer.lines[lineIdx].style.color)
-                                .frame(width: 50, height: 10)
-                            Text(layer.lines[lineIdx].dataSet.name ?? "")
-                        }
-                    }
-                }
+                    .frame(width: XYPlotConstants.yAxisLabelsWidth)
+                CaptionView($layer)
             }
             .frame(maxWidth: .infinity, minHeight: XYPlotConstants.captionHeight)
-            // end HStack for caption
         }
         .padding(layerInsets)
     }
@@ -172,3 +115,43 @@ public struct LayerView: View {
     }
 }
 
+
+struct LayerLinesView: View {
+
+    @Binding var layer: XYLayer
+
+    @Binding var dataBounds: XYRect
+
+    var body: some View {
+        GeometryReader { proxy in
+
+            let dataTransform = CGAffineTransform(scaleX: 1, y: -1)
+                .translatedBy(x: 0, y: -proxy.frame(in: .local).height)
+                .scaledBy(x: proxy.frame(in: .local).width / dataBounds.width,
+                          y: proxy.frame(in: .local).height / dataBounds.height)
+                .translatedBy(x: -dataBounds.minX, y: -dataBounds.minY)
+
+            ForEach(layer.lines.indices, id: \.self) { lineIdx in
+                let points = layer.lines[lineIdx].dataSet.points
+                if points.count > 0 {
+
+                    Path { path in
+                        path.move(to: points[0])
+                        for j in 1..<points.count {
+                            path.addLine(to: points[j])
+                        }
+                    }
+                    .applying(dataTransform)
+                    .stroke(layer.lines[lineIdx].style.color)
+                }
+            }
+        }
+        .background(UIConstants.trueBlack)
+        // .clipped()
+    }
+
+    init(_ layer: Binding<XYLayer>, _ dataBounds: Binding<XYRect>) {
+        self._layer = layer
+        self._dataBounds = dataBounds
+    }
+}
