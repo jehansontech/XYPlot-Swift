@@ -29,5 +29,7 @@ struct XYPlotConstants {
     static let xAxisLabelsHeight: CGFloat = 60
 
     static let yAxisLabelsWidth: CGFloat = 60
+
+    static let captionRows: Int = 3
 }
 
