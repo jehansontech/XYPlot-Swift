@@ -86,15 +86,23 @@ public struct LayerView: View {
             }
             // end HStack for x-axis labels
 
-            // begin HStack for caption
+            // begin HStack fo"r caption
             HStack(spacing: 0) {
 
                 // so it'll be centered under the plot
                 Spacer()
                     .frame(width: XYPlotConstants.yAxisLabelsWidth, height: XYPlotConstants.xAxisLabelsHeight)
 
-                // TODO legend: name and color for each line
-
+                VStack {
+                    ForEach(layer.lines.indices, id: \.self) { lineIdx in
+                        HStack {
+                            Rectangle()
+                                .fill(layer.lines[lineIdx].style.color)
+                                .frame(width: 50, height: 10)
+                            Text(layer.lines[lineIdx].dataSet.name ?? "")
+                        }
+                    }
+                }
             }
             .frame(maxWidth: .infinity, minHeight: XYPlotConstants.captionHeight)
             // end HStack for caption
