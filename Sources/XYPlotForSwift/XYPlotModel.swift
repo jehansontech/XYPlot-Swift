@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import UIStuffForSwift
 
 public struct XYLineStyle {
 
@@ -52,6 +52,14 @@ public struct AxisLabels {
 
 public struct XYLine {
 
+    var label: String {
+        return dataSet.name ?? "(no label)"
+    }
+
+    var color: Color {
+        return style.color
+    }
+    
     public var dataSet: XYDataSet
 
     public var style: XYLineStyle
@@ -76,11 +84,13 @@ public struct XYLayer {
 
     public var showing: Bool
 
+    var colors: PresetColorIterator
+
     public init(_ dataSource: XYDataSource, _ showing: Bool) {
         self.xAxisLabels = XYLayer.makeXAxisLabels(dataSource)
         self.yAxisLabels = XYLayer.makeYAxisLabels(dataSource)
         self.showing = showing
-
+        self.colors = PresetColorSequence().makeIterator()
         for dataSet in dataSource.dataSets {
             lines.append(XYLine(dataSet, makeStyle(dataSet)))
         }
@@ -95,12 +105,12 @@ public struct XYLayer {
 
     }
 
-    private func makeStyle(_ dataSet: XYDataSet) -> XYLineStyle {
+    private mutating func makeStyle(_ dataSet: XYDataSet) -> XYLineStyle {
         if let color = dataSet.color {
             return XYLineStyle(color: color)
         }
         else {
-            return XYLineStyle()
+            return XYLineStyle(color: colors.next() ?? Color.black)
         }
     }
 }

@@ -18,9 +18,9 @@ struct CaptionColumn: View {
             ForEach(lineIndices, id: \.self) { idx in
                 HStack {
                     Rectangle()
-                        .fill()
+                        .fill(layer.lines[idx].color)
                         .frame(width: 50, height: 2)
-                    Text(lineName(idx))
+                    Text(layer.lines[idx].label)
                 }
             }
         }
@@ -29,14 +29,6 @@ struct CaptionColumn: View {
     init(_ layer: Binding<XYLayer>, _ lineIndices: [Int]) {
         self._layer = layer
         self.lineIndices = lineIndices
-    }
-
-    func lineColor(_ idx: Int) -> Color {
-        return layer.lines[idx].style.color
-    }
-
-    func lineName(_ idx: Int) -> String {
-        return layer.lines[idx].dataSet.name ?? "(no label)"
     }
 }
 
@@ -51,6 +43,7 @@ struct CaptionView: View {
             ForEach(columns, id: \.self) { column in
                 CaptionColumn($layer, column)
             }
+            Spacer()
         }
     }
 
