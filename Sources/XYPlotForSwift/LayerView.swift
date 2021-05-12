@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import Taconic
-import UIStuffForSwift
+import Wacoma
+import WacomaUI
 
 
 public struct LayerView: View {

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import UIStuffForSwift
+import WacomaUI
 
 public struct XYLineStyle {
 
