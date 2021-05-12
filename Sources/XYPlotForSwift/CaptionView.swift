@@ -12,7 +12,17 @@ struct CaptionView: View {
     @Binding var layer: XYLayer
 
     var body: some View {
-        Text("CaptionView")
+        HStack {
+            VStack {
+                Text("Caption Line 1")
+                Text("Caption Line 2")
+            }
+            VStack {
+                Text("Caption Line 3")
+                Text("Caption Line 4")
+                Text("Caption Line 5")
+            }
+        }
     }
 
     init(_ layer: Binding<XYLayer>) {
