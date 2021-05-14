@@ -12,11 +12,24 @@ import WacomaUI
 extension XYRect {
 
     var exponentX: Int {
+
         let m1 = Double.orderOfMagnitude(Double(minX))
         let m2 = Double.orderOfMagnitude(Double(maxX))
         let m3 = Double.orderOfMagnitude(Double(width))
         let max = max(max(m1, m2), m3)
-        return max - 1
+        var exponent = max - 1
+
+
+        // FIXME EVIL HACKERY
+        let multiplier = CGFloat(pow(10,Double(exponent)))
+        let min2: Int = Int(floor(self.minX / multiplier))
+        let max2: Int = Int(ceil(self.maxX / multiplier))
+        let delta = max2 - min2
+        if (delta > 50) {
+            exponent += 1
+        }
+
+        return exponent
     }
 
     var exponentY: Int {
@@ -24,7 +37,19 @@ extension XYRect {
         let m2 = Double.orderOfMagnitude(Double(maxY))
         let m3 = Double.orderOfMagnitude(Double(height))
         let max = max(max(m1, m2), m3)
-        return max - 1
+        var exponent = max - 1
+
+
+        // FIXME EVIL HACKERY
+        let multiplier = CGFloat(pow(10,Double(exponent)))
+        let min2: Int = Int(floor(self.minY / multiplier))
+        let max2: Int = Int(ceil(self.maxY / multiplier))
+        let delta = max2 - min2
+        if (delta > 50) {
+            exponent += 1
+        }
+
+        return exponent
     }
 }
 
