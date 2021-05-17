@@ -27,7 +27,6 @@ public struct LayerView: View {
             HStack(spacing: 0) {
                 YAxisView($layer.yAxisLabels, $dataBounds)
                     .frame(width: XYPlotConstants.yAxisLabelsWidth)
-                    .border(Color.gray)
                 LayerLinesView($layer, $dataBounds)
                 Spacer()
                     .frame(width: XYPlotConstants.yAxisLabelsWidth)
@@ -38,7 +37,6 @@ public struct LayerView: View {
                     .frame(width: XYPlotConstants.yAxisLabelsWidth)
                 XAxisView($layer.xAxisLabels, $dataBounds)
                     .frame(height: XYPlotConstants.xAxisLabelsHeight)
-                    .border(Color.gray)
                 Spacer()
                     .frame(width: XYPlotConstants.yAxisLabelsWidth)
             }
