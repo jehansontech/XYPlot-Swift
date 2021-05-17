@@ -20,16 +20,12 @@ public struct LayerSelector: View {
                 .font(.headline)
 
             ForEach(model.layers.indices, id:\.self) { layerIdx in
-                let showing = model.layers[layerIdx].showing
                 Button(action: { selectLayer(layerIdx) }) {
-                    HStack {
-                        Image(systemName: showing ? "checkmark.circle": "circle")
-                            .imageScale(.large)
-                            .foregroundColor(UIConstants.controlColor)
-                            .frame(minWidth: UIConstants.symbolButtonWidth, minHeight: UIConstants.symbolButtonHeight)
-                        Text(model.layers[layerIdx].title)
-                    }
+                    Text(model.layers[layerIdx].title)
                 }
+                .foregroundColor(UIConstants.controlColor)
+                .modifier(SpanningButtonStyle())
+
             }
         }
     }

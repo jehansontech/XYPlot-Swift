@@ -23,9 +23,6 @@ public struct PlotOverlayView: View {
             // right edge VStack
             VStack {
 
-                // shift down to avoid the page buttons
-                // Spacer().frame(height: UIConstants.symbolButtonHeight + UIConstants.buttonSpacing)
-
                 // right-side buttons
                 VStack(spacing: UIConstants.buttonSpacing) {
 
