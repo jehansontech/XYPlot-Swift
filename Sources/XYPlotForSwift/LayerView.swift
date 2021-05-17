@@ -23,7 +23,6 @@ public struct LayerView: View {
             Text(layer.title)
                 .font(.headline)
                 .frame(maxWidth: .infinity, minHeight: XYPlotConstants.titleHeight)
-                .border(Color.gray)
 
             HStack(spacing: 0) {
                 YAxisView($layer.yAxisLabels, $dataBounds)
