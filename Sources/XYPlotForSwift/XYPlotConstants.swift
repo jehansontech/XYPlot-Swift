@@ -22,9 +22,7 @@ struct XYPlotConstants {
 
     static let captionHeight: CGFloat = 120
 
-    static let layerTopInset: CGFloat = UIConstants.symbolButtonHeight
-
-    static let titleHeight: CGFloat = 60
+    static let titleHeight: CGFloat = UIConstants.symbolButtonHeight + UIConstants.buttonSpacing
 
     static let xAxisLabelsHeight: CGFloat = 60
 

@@ -12,8 +12,6 @@ import WacomaUI
 
 public struct LayerView: View {
 
-    public var layerInsets = EdgeInsets(top: XYPlotConstants.layerTopInset, leading: 0, bottom: 0, trailing: XYPlotConstants.yAxisLabelsWidth)
-
     @Binding private var layer: XYLayer
 
     @State private var dataBounds = XYRect()
@@ -31,6 +29,8 @@ public struct LayerView: View {
                 YAxisView($layer.yAxisLabels, $dataBounds)
                     .frame(width: XYPlotConstants.yAxisLabelsWidth)
                 LayerLinesView($layer, $dataBounds)
+                Spacer()
+                    .frame(width: XYPlotConstants.yAxisLabelsWidth)
             }
 
             HStack(spacing: 0) {
@@ -44,6 +44,8 @@ public struct LayerView: View {
                 Spacer()
                     .frame(width: XYPlotConstants.yAxisLabelsWidth)
                 CaptionView($layer)
+                Spacer()
+                    .frame(width: XYPlotConstants.yAxisLabelsWidth)
             }
             .frame(maxWidth: .infinity, minHeight: XYPlotConstants.captionHeight)
         }
