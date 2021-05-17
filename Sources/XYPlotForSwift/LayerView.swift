@@ -25,6 +25,7 @@ public struct LayerView: View {
             Text(layer.title)
                 .font(.headline)
                 .frame(maxWidth: .infinity, minHeight: XYPlotConstants.titleHeight)
+                .border(Color.gray)
 
             HStack(spacing: 0) {
                 YAxisView($layer.yAxisLabels, $dataBounds)
@@ -46,7 +47,7 @@ public struct LayerView: View {
             }
             .frame(maxWidth: .infinity, minHeight: XYPlotConstants.captionHeight)
         }
-        .padding(layerInsets)
+        // .padding(layerInsets)
     }
 
     public init(_ layer: Binding<XYLayer>) {
