@@ -53,7 +53,7 @@ public struct AxisLabels {
 public struct XYLine {
 
     var label: String {
-        return dataSet.name ?? "(no label)"
+        return dataSet.name ?? ""
     }
 
     var color: Color {
