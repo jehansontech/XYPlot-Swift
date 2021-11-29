@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Wacoma
-import WacomaUI
 
 extension XYRect {
 

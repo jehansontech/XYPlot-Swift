@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import WacomaUI
 
 public struct LayerSelector: View {
 
@@ -23,8 +22,8 @@ public struct LayerSelector: View {
                 Button(action: { selectLayer(layerIdx) }) {
                     Text(model.layers[layerIdx].title)
                 }
-                .foregroundColor(UIConstants.controlColor)
-                .modifier(SpanningButtonStyle())
+                // .foregroundColor(UIConstants.controlColor)
+                // .modifier(SpanningButtonStyle())
 
             }
         }

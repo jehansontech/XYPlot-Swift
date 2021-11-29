@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Wacoma
-import WacomaUI
 
 
 public struct LayerView: View {
@@ -146,7 +145,7 @@ struct LayerLinesView: View {
                 }
             }
         }
-        .background(UIConstants.trueBlack)
+        .background(Color.black)
         // .clipped()
     }
 

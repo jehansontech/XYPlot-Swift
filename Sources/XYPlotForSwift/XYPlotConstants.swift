@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import WacomaUI
 
 struct XYPlotConstants {
 
@@ -22,12 +21,13 @@ struct XYPlotConstants {
 
     static let captionHeight: CGFloat = 120
 
-    static let titleHeight: CGFloat = UIConstants.symbolButtonHeight + UIConstants.buttonSpacing
+    static let titleHeight: CGFloat = 15 // UIConstants.symbolButtonHeight + UIConstants.buttonSpacing
 
     static let xAxisLabelsHeight: CGFloat = 60
 
     static let yAxisLabelsWidth: CGFloat = 60
 
     static let captionRows: Int = 3
+
 }
 

@@ -18,7 +18,7 @@ let package = Package(
     targets: [
         .target(
             name: "XYPlotForSwift",
-            dependencies: [.product(name: "WacomaUI", package: "Wacoma")]),
+            dependencies: ["Wacoma"]),
 	.testTarget(
 	    name: "XYPlotForSwiftTests",
             dependencies: ["XYPlotForSwift"])
