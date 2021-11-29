@@ -8,65 +8,20 @@
 import SwiftUI
 import Wacoma
 
-public struct XYLineStyle {
+public struct XYPlotModel {
 
-    public var color = Color.white
-}
+    public var layers = [XYLayer]()
 
-public struct AxisLabels {
-
-    public var name: String
-
-    public var units: String?
-
-    init(name: String, units: String? = nil) {
-        self.name = name
-        self.units = units
+    public init(_ dataSource: XYDataSource) {
+        layers.append(XYLayer(dataSource, true))
     }
 
-    func makeLabel(_ exponent: Int) -> String {
-        if let units = units {
-            if exponent == 0 {
-                return "\(name) (\(units))"
-            }
-            else if exponent == 1 {
-                return "\(name) (\(units) x 10)"
-            }
-            else {
-                return "\(name) (\(units) x 10^\(exponent))"
-            }
+    public init(_ dataSources: [XYDataSource]) {
+        var showing = true
+        for dataSource in dataSources {
+            layers.append(XYLayer(dataSource, showing))
+            showing = false
         }
-        else {
-            if exponent == 0 {
-                return name
-            }
-            else if exponent == 1 {
-                return "\(name) (x 10)"
-            }
-            else {
-                return "\(name) (x 10^\(exponent))"
-            }
-        }
-    }
-}
-
-public struct XYLine {
-
-    var label: String {
-        return dataSet.name ?? ""
-    }
-
-    var color: Color {
-        return style.color
-    }
-    
-    public var dataSet: XYDataSet
-
-    public var style: XYLineStyle
-
-    public init(_ dataSet: XYDataSet, _ style: XYLineStyle) {
-        self.dataSet = dataSet
-        self.style = style
     }
 }
 
@@ -115,19 +70,65 @@ public struct XYLayer {
     }
 }
 
-public struct XYPlotModel {
+public struct XYLine {
 
-    public var layers = [XYLayer]()
-
-    public init(_ dataSource: XYDataSource) {
-        layers.append(XYLayer(dataSource, true))
+    var label: String {
+        return dataSet.name ?? ""
     }
 
-    public init(_ dataSources: [XYDataSource]) {
-        var showing = true
-        for dataSource in dataSources {
-            layers.append(XYLayer(dataSource, showing))
-            showing = false
+    var color: Color {
+        return style.color
+    }
+    
+    public var dataSet: XYDataSet
+
+    public var style: XYLineStyle
+
+    public init(_ dataSet: XYDataSet, _ style: XYLineStyle) {
+        self.dataSet = dataSet
+        self.style = style
+    }
+}
+
+public struct XYLineStyle {
+
+    public var color = Color.white
+}
+
+public struct AxisLabels {
+
+    public var name: String
+
+    public var units: String?
+
+    init(name: String, units: String? = nil) {
+        self.name = name
+        self.units = units
+    }
+
+    func makeLabel(_ exponent: Int) -> String {
+        if let units = units {
+            if exponent == 0 {
+                return "\(name) (\(units))"
+            }
+            else if exponent == 1 {
+                return "\(name) (\(units) x 10)"
+            }
+            else {
+                return "\(name) (\(units) x 10^\(exponent))"
+            }
+        }
+        else {
+            if exponent == 0 {
+                return name
+            }
+            else if exponent == 1 {
+                return "\(name) (x 10)"
+            }
+            else {
+                return "\(name) (x 10^\(exponent))"
+            }
         }
     }
- }
+}
+

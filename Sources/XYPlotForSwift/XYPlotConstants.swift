@@ -21,7 +21,7 @@ struct XYPlotConstants {
 
     static let captionHeight: CGFloat = 120
 
-    static let titleHeight: CGFloat = 15 // UIConstants.symbolButtonHeight + UIConstants.buttonSpacing
+    static let titleHeight: CGFloat = 20
 
     static let xAxisLabelsHeight: CGFloat = 60
 
