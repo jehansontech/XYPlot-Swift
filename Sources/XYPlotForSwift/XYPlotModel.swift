@@ -1,6 +1,6 @@
 //
-//  XYPlotConfig.swift
-//  ArcWorld
+//  XYPlotPlotModel.swift
+//  XYPlotForSwift
 //
 //  Created by Jim Hanson on 4/9/21.
 //
