@@ -23,9 +23,38 @@ public struct XYPlotModel {
             showing = false
         }
     }
+
+    public mutating func selectLayer(_ index: Int) {
+        for idx in layers.indices {
+            layers[idx].showing = false
+        }
+        layers[index].showing = true
+    }
+
+    public mutating func selectLayer(withName name: String) -> Bool {
+        for idx in layers.indices {
+            if layers[idx].name == name {
+                selectLayer(idx)
+                return true
+            }
+        }
+        return false
+    }
+
+    public mutating func selectLayer(withTitle title: String) -> Bool {
+        for idx in layers.indices {
+            if layers[idx].title == title {
+                selectLayer(idx)
+                return true
+            }
+        }
+        return false
+    }
 }
 
 public struct XYLayer {
+
+    public let name: String
 
     public var title: String {
         return "\(yAxisLabels.name) vs. \(xAxisLabels.name)"
@@ -42,6 +71,7 @@ public struct XYLayer {
     var colors: PresetColorIterator
 
     public init(_ dataSource: XYDataSource, _ showing: Bool) {
+        self.name = dataSource.name
         self.xAxisLabels = XYLayer.makeXAxisLabels(dataSource)
         self.yAxisLabels = XYLayer.makeYAxisLabels(dataSource)
         self.showing = showing

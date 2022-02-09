@@ -28,6 +28,7 @@ public extension XYRect {
 
 public protocol XYDataSet {
 
+    /// Optional name of this data set. No guarantee of uniqueness if set
     var name: String? { get }
     
     var color: Color? { get }
@@ -38,6 +39,9 @@ public protocol XYDataSet {
 }
 
 public protocol XYDataSource {
+
+    /// The name of this data source. May be empty. No guarantee of uniqueness.
+    var name: String { get }
 
     var xAxisName: String { get }
 
