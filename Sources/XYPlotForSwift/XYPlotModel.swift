@@ -68,14 +68,16 @@ public struct XYLayer {
 
     public var showing: Bool
 
-    var colors: PresetColorIterator
+    var lineColors: PresetColorIterator
+
+    var fallbackLineColor: Color = .gray
 
     public init(_ dataSource: XYDataSource, _ showing: Bool) {
         self.name = dataSource.name
         self.xAxisLabels = XYLayer.makeXAxisLabels(dataSource)
         self.yAxisLabels = XYLayer.makeYAxisLabels(dataSource)
         self.showing = showing
-        self.colors = PresetColorSequence().makeIterator()
+        self.lineColors = PresetColorSequence().makeIterator()
         for dataSet in dataSource.dataSets {
             lines.append(XYLine(dataSet, makeStyle(dataSet)))
         }
@@ -95,7 +97,7 @@ public struct XYLayer {
             return XYLineStyle(color: color)
         }
         else {
-            return XYLineStyle(color: colors.next() ?? Color.black)
+            return XYLineStyle(color: lineColors.next() ?? fallbackLineColor)
         }
     }
 }

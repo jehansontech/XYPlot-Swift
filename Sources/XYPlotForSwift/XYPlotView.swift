@@ -46,6 +46,7 @@ public struct LayerView: View {
             Text(layer.title)
                 .font(.headline)
                 .frame(maxWidth: .infinity, minHeight: XYPlotConstants.titleHeight)
+                .padding(.bottom, 10)
 
             HStack(spacing: 0) {
                 YAxisView($layer.yAxisLabels, $dataBounds)
@@ -74,6 +75,7 @@ public struct LayerView: View {
             .frame(maxWidth: .infinity, minHeight: XYPlotConstants.captionHeight)
         }
         // .padding(layerInsets)
+        .background(Color.clear)
     }
 
     public init(_ layer: Binding<XYLayer>) {
@@ -145,6 +147,8 @@ struct LayerLinesView: View {
 
     @Binding var dataBounds: XYRect
 
+    var backgroundColor: Color
+
     var body: some View {
         GeometryReader { proxy in
 
@@ -169,12 +173,13 @@ struct LayerLinesView: View {
                 }
             }
         }
-        .background(Color.black)
         // .clipped()
+        .background(backgroundColor)
     }
 
-    init(_ layer: Binding<XYLayer>, _ dataBounds: Binding<XYRect>) {
+    init(_ layer: Binding<XYLayer>, _ dataBounds: Binding<XYRect>, _ backgroundColor: Color = .black) {
         self._layer = layer
         self._dataBounds = dataBounds
+        self.backgroundColor = .black
     }
 }
