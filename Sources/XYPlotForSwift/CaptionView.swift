@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct CaptionColumn: View {
+struct LegendColumn: View {
 
     @Binding var layer: XYLayer
 
     let lineIndices: [Int]
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             ForEach(lineIndices, id: \.self) { idx in
                 HStack {
                     Rectangle()
@@ -43,13 +43,20 @@ struct CaptionView: View {
 
     var columns: [[Int]]
 
+    @State var captionText: String = "This is the caption"
+
     var body: some View {
         HStack(alignment: .top) {
             ForEach(columns, id: \.self) { column in
-                CaptionColumn($layer, column)
+                LegendColumn($layer, column)
             }
-            Spacer()
+            Spacer().frame(width: 20)
+            Text(layer.caption)
+                .multilineTextAlignment(.trailing)
+                .frame(maxWidth: .infinity, alignment: .trailing)
         }
+        .padding(.top, 20)
+        .frame(height: XYPlotConstants.captionHeight)
     }
 
     init(_ layer: Binding<XYLayer>) {
@@ -62,11 +69,11 @@ struct CaptionView: View {
         if lines.count > 1 || lines.count == 1 && !lines[0].label.isEmpty {
             var nextIndex: Int = 0
             var remaining: Int = lines.count
-            while remaining > XYPlotConstants.captionRows {
-                let column = Array(nextIndex..<(nextIndex + XYPlotConstants.captionRows))
+            while remaining > XYPlotConstants.legendRows {
+                let column = Array(nextIndex..<(nextIndex + XYPlotConstants.legendRows))
                 columns.append(column)
-                nextIndex += XYPlotConstants.captionRows
-                remaining -= XYPlotConstants.captionRows
+                nextIndex += XYPlotConstants.legendRows
+                remaining -= XYPlotConstants.legendRows
             }
             if (remaining > 0) {
                 let column = Array(nextIndex..<lines.count)

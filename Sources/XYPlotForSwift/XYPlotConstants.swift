@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct XYPlotConstants {
+public struct XYPlotConstants {
 
     // EMPIRICAL
     static let axisLabelCharHeight: CGFloat = 20
@@ -19,7 +19,7 @@ struct XYPlotConstants {
 
     static let axisTickLength: CGFloat = 10
 
-    static let captionHeight: CGFloat = 120
+    public static let captionHeight: CGFloat = 100
 
     static let titleHeight: CGFloat = 20
 
@@ -27,7 +27,7 @@ struct XYPlotConstants {
 
     static let yAxisLabelsWidth: CGFloat = 60
 
-    static let captionRows: Int = 3
+    static let legendRows: Int = 4
 
 }
 

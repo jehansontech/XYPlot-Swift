@@ -50,6 +50,23 @@ public struct XYPlotModel {
         }
         return false
     }
+
+    public func getCaption(forLayerWithName name: String) -> String {
+        for idx in layers.indices {
+            if layers[idx].name == name {
+                return layers[idx].caption
+            }
+        }
+        return ""
+    }
+
+    public mutating func setCaption(forLayerWithName name: String, _ caption: String) {
+        for idx in layers.indices {
+            if layers[idx].name == name {
+                layers[idx].caption = caption
+            }
+        }
+    }
 }
 
 public struct XYLayer {
@@ -65,6 +82,8 @@ public struct XYLayer {
     public var yAxisLabels: AxisLabels
 
     public var lines = [XYLine]()
+
+    public var caption: String = ""
 
     public var showing: Bool
 
