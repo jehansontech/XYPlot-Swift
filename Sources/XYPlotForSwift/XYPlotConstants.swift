@@ -1,6 +1,6 @@
 //
 //  XYPlotConstants.swift
-//  ArcWorld
+//  XYPlotForSwift
 //
 //  Created by Jim Hanson on 4/9/21.
 //
@@ -21,13 +21,13 @@ public struct XYPlotConstants {
 
     public static let captionHeight: CGFloat = 100
 
-    static let titleHeight: CGFloat = 20
+    public static let titleHeight: CGFloat = 20
 
-    static let xAxisLabelsHeight: CGFloat = 60
+    public static let xAxisLabelsHeight: CGFloat = 60
 
-    static let yAxisLabelsWidth: CGFloat = 60
+    public static let yAxisLabelsWidth: CGFloat = 60
 
-    static let legendRows: Int = 4
+    public static let legendRows: Int = 4
 
 }
 

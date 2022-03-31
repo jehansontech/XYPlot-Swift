@@ -1,163 +1,145 @@
 //
-//  XYPlotPlotModel.swift
+//  XYPlotModel.swift
 //  XYPlotForSwift
 //
-//  Created by Jim Hanson on 4/9/21.
+//  Created by Jim Hanson on 3/26/22.
 //
 
 import SwiftUI
-import Wacoma
 
-public struct XYPlotModel {
+public typealias XYPoint = CGPoint
 
-    public var layers = [XYLayer]()
+public typealias XYRect = CGRect
 
-    public init(_ dataSource: XYDataSource) {
-        layers.append(XYLayer(dataSource, true))
+public extension XYRect {
+
+    init(_ p: XYPoint) {
+        self.init(x: p.x, y: p.y, width: 0, height: 0)
     }
 
-    public init(_ dataSources: [XYDataSource]) {
-        var showing = true
-        for dataSource in dataSources {
-            layers.append(XYLayer(dataSource, showing))
-            showing = false
-        }
+    func cover(_ point: XYPoint) -> XYRect {
+        let minX = min(point.x, self.minX)
+        let maxX = max(point.x, self.maxX)
+        let minY = min(point.y, self.minY)
+        let maxY = max(point.y, self.maxY)
+        return XYRect(x: minX, y: minY, width: (maxX-minX), height: (maxY-minY))
+    }
+}
+
+public class XYPlotModel: ObservableObject {
+
+    public var hasTitle: Bool {
+        return !title.isEmpty
     }
 
-    public mutating func selectLayer(_ index: Int) {
-        for idx in layers.indices {
-            layers[idx].showing = false
-        }
-        layers[index].showing = true
-    }
+    public var title: String
 
-    public mutating func selectLayer(withName name: String) -> Bool {
-        for idx in layers.indices {
-            if layers[idx].name == name {
-                selectLayer(idx)
-                return true
-            }
-        }
-        return false
-    }
+    @Published public var layers = [XYLayer]()
 
-    public mutating func selectLayer(withTitle title: String) -> Bool {
-        for idx in layers.indices {
-            if layers[idx].title == title {
-                selectLayer(idx)
-                return true
-            }
-        }
-        return false
-    }
+    @Published public var selectedLayer: Int = 0
 
-    public func getCaption(forLayerWithName name: String) -> String {
-        for idx in layers.indices {
-            if layers[idx].name == name {
-                return layers[idx].caption
-            }
-        }
-        return ""
-    }
+    @Published public var caption: String
 
-    public mutating func setCaption(forLayerWithName name: String, _ caption: String) {
-        for idx in layers.indices {
-            if layers[idx].name == name {
-                layers[idx].caption = caption
-            }
-        }
+    public init(title: String = "", caption: String = "") {
+        self.title = title
+        self.caption = caption
     }
 }
 
 public struct XYLayer {
 
-    public let name: String
-
-    public var title: String {
-        return "\(yAxisLabels.name) vs. \(xAxisLabels.name)"
-    }
-
-    public var xAxisLabels: AxisLabels
-
-    public var yAxisLabels: AxisLabels
-
-    public var lines = [XYLine]()
-
-    public var caption: String = ""
-
-    public var showing: Bool
-
-    var lineColors: PresetColorIterator
-
-    var fallbackLineColor: Color = .gray
-
-    public init(_ dataSource: XYDataSource, _ showing: Bool) {
-        self.name = dataSource.name
-        self.xAxisLabels = XYLayer.makeXAxisLabels(dataSource)
-        self.yAxisLabels = XYLayer.makeYAxisLabels(dataSource)
-        self.showing = showing
-        self.lineColors = PresetColorSequence().makeIterator()
-        for dataSet in dataSource.dataSets {
-            lines.append(XYLine(dataSet, makeStyle(dataSet)))
+    public var hasData: Bool {
+        for dataSet in dataSets {
+            if dataSet.points.count > 0 {
+                return true
+            }
         }
+        return false
     }
 
-    private static func makeXAxisLabels(_ dataSource: XYDataSource) -> AxisLabels {
-        return AxisLabels(name: dataSource.xAxisName, units: dataSource.xAxisUnits)
+    public var title: String
+
+    public var xLabel: AxisLabel
+
+    public var yLabel: AxisLabel
+
+    public var bounds: XYRect? = nil
+
+    public private(set) var dataSets = [XYDataSet]()
+
+    public private(set) var dataBounds: XYRect? = nil
+
+    public init(xLabel: AxisLabel, yLabel: AxisLabel) {
+        self.xLabel = xLabel
+        self.yLabel = yLabel
+        self.title = "\(yLabel.name) vs. \(xLabel.name)"
     }
 
-    private static func makeYAxisLabels(_ dataSource: XYDataSource) -> AxisLabels {
-        return AxisLabels(name: dataSource.yAxisName, units: dataSource.yAxisUnits)
-
+    /// returns new data set's index
+    @discardableResult public mutating func addDataSet(_ label: String, _ color: Color = .black, _ stroke: Stroke = .solid) -> Int {
+        let idx = dataSets.count
+        dataSets.append(XYDataSet(label, color, stroke))
+        return idx
     }
 
-    private mutating func makeStyle(_ dataSet: XYDataSet) -> XYLineStyle {
-        if let color = dataSet.color {
-            return XYLineStyle(color: color)
+    public mutating func addPoint(_ dataSetIndex: Int, _ point: XYPoint) {
+        dataSets[dataSetIndex].points.append(point)
+        let newBounds = dataBounds?.cover(point) ?? XYRect(point)
+        self.dataBounds = newBounds
+        self.bounds = Self.fixBounds(newBounds)
+    }
+
+    public mutating func clearData() {
+        for idx in dataSets.indices {
+            dataSets[idx].points.removeAll()
         }
-        else {
-            return XYLineStyle(color: lineColors.next() ?? fallbackLineColor)
-        }
+        bounds = nil
+    }
+
+    /// This expands the bounds so that axis numbers look good
+    private static func fixBounds(_ trueBounds: XYRect) -> XYRect {
+
+        let multiplierX = CGFloat(pow(10, Double(trueBounds.exponentX)))
+        let minX2 = multiplierX * floor(trueBounds.minX / multiplierX)
+        let maxX2 = multiplierX * ceil(trueBounds.maxX / multiplierX)
+
+        let multiplierY = CGFloat(pow(10, Double(trueBounds.exponentY)))
+        let minY2 = multiplierY * floor(trueBounds.minY / multiplierY)
+        let maxY2 = multiplierY * ceil(trueBounds.maxY / multiplierY)
+
+        // DEBUGGING
+        //            if (minX2 != trueBounds.minX) {
+        //                print("XYLayer3: adjusted minX: \(trueBounds.minX) -> \(minX2)")
+        //            }
+        //            if (maxX2 != trueBounds.maxX) {
+        //                print("XYLayer3: adjusted maxX: \(trueBounds.maxX) -> \(maxX2)")
+        //            }
+        //            if minY2 != trueBounds.minY {
+        //                print("XYLayer3: adjusted minY: \(trueBounds.minY) -> \(minY2)")
+        //            }
+        //            if (maxY2 != trueBounds.maxY) {
+        //                print("XYLayer3: adjusted maxY: \(trueBounds.maxY) -> \(maxY2)")
+        //            }
+
+        return XYRect(x: minX2,
+                      y: minY2,
+                      width:  minX2 < maxX2 ? maxX2 - minX2 : 1,
+                      height: minY2 < maxY2 ? maxY2 - minY2 : 1)
     }
 }
 
-public struct XYLine {
-
-    var label: String {
-        return dataSet.name ?? ""
-    }
-
-    var color: Color {
-        return style.color
-    }
-    
-    public var dataSet: XYDataSet
-
-    public var style: XYLineStyle
-
-    public init(_ dataSet: XYDataSet, _ style: XYLineStyle) {
-        self.dataSet = dataSet
-        self.style = style
-    }
-}
-
-public struct XYLineStyle {
-
-    public var color = Color.white
-}
-
-public struct AxisLabels {
+public struct AxisLabel {
 
     public var name: String
 
     public var units: String?
 
-    init(name: String, units: String? = nil) {
+    public init(_ name: String, _ units: String? = nil) {
         self.name = name
         self.units = units
     }
 
-    func makeLabel(_ exponent: Int) -> String {
+    func makeLabelText(_ exponent: Int) -> String {
         if let units = units {
             if exponent == 0 {
                 return "\(name) (\(units))"
@@ -183,3 +165,19 @@ public struct AxisLabels {
     }
 }
 
+public struct XYDataSet {
+    public var label: String
+    public var color: Color
+    public var stroke: Stroke
+    public var points = [XYPoint]()
+
+    public init(_ label: String, _ color: Color = .black, _ stroke: Stroke = .solid) {
+        self.label = label
+        self.color = color
+        self.stroke = stroke
+    }
+}
+
+public enum Stroke {
+    case solid
+}
