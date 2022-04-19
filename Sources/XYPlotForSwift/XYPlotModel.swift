@@ -34,15 +34,33 @@ public class XYPlotModel: ObservableObject {
 
     public var title: String
 
-    @Published public var layers = [XYLayer]()
-
-    @Published public var selectedLayer: Int = 0
-
     @Published public var caption: String
+
+    @Published public var layers: [XYLayer]
+
+    @Published public var selectedLayer: Int?
 
     public init(title: String = "", caption: String = "") {
         self.title = title
         self.caption = caption
+        self.layers = [XYLayer]()
+        self.selectedLayer = nil
+    }
+
+    public func addLayer(xLabel: AxisLabel, yLabel: AxisLabel) -> Int {
+        print("XYPlotModel.addLayer")
+        let layerIndex = layers.count
+        layers.append(XYLayer(xLabel: xLabel, yLabel: yLabel))
+        if selectedLayer == nil {
+            selectedLayer = layerIndex
+        }
+        return layerIndex
+    }
+
+    public func clearData() {
+        for idx in layers.indices {
+            layers[idx].clearData()
+        }
     }
 }
 

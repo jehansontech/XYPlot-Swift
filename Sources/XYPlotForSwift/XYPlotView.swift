@@ -22,18 +22,18 @@ public struct XYPlotView: View {
                     .padding(.bottom, 10)
             }
             
-            if model.layers.count > 0 {
+            if let selectedLayer = model.selectedLayer {
                 
-                Text(model.layers[model.selectedLayer].title)
+                Text(model.layers[selectedLayer].title)
                     .font(.headline)
                     .frame(maxWidth: .infinity, minHeight: XYPlotConstants.titleHeight)
                     .padding(.bottom, 10)
                 
                 
                 HStack(spacing: 0) {
-                    YAxisView(model.layers[model.selectedLayer])
+                    YAxisView(model.layers[selectedLayer])
                         .frame(width: XYPlotConstants.yAxisLabelsWidth)
-                    LayerView(model.layers[model.selectedLayer])
+                    LayerView(model.layers[selectedLayer])
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .border(Color.gray)
                     Spacer()
@@ -43,7 +43,7 @@ public struct XYPlotView: View {
                 HStack(spacing: 0) {
                     Spacer()
                         .frame(width: XYPlotConstants.yAxisLabelsWidth)
-                    XAxisView(model.layers[model.selectedLayer])
+                    XAxisView(model.layers[selectedLayer])
                         .frame(height: XYPlotConstants.xAxisLabelsHeight)
                     Spacer()
                         .frame(width: XYPlotConstants.yAxisLabelsWidth)
@@ -52,7 +52,7 @@ public struct XYPlotView: View {
                 HStack(alignment: .top, spacing: 0) {
                     Spacer()
                         .frame(width: XYPlotConstants.yAxisLabelsWidth)
-                    LegendView(model.layers[model.selectedLayer])
+                    LegendView(model.layers[selectedLayer])
                     Spacer().frame(width: 20)
                     CaptionView(model)
                     Spacer()
@@ -68,6 +68,7 @@ public struct XYPlotView: View {
     }
     
     public init(_ model: XYPlotModel) {
+        print("XYPlotView.init selectedLayer=\(String(describing: model.selectedLayer))")
         self.model = model
     }
 }
