@@ -47,8 +47,7 @@ public class XYPlotModel: ObservableObject {
         self.selectedLayer = nil
     }
 
-    public func addLayer(xLabel: AxisLabel, yLabel: AxisLabel) -> Int {
-        print("XYPlotModel.addLayer")
+    @discardableResult public func addLayer(xLabel: AxisLabel, yLabel: AxisLabel) -> Int {
         let layerIndex = layers.count
         layers.append(XYLayer(xLabel: xLabel, yLabel: yLabel))
         if selectedLayer == nil {

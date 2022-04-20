@@ -103,19 +103,10 @@ struct XAxisView: View {
 
             if layer.hasData {
                 GeometryReader { proxy in
-
-                    // XYLayer:
-                    //                let dataTransform = CGAffineTransform(scaleX: 1, y: -1)
-                    //                    .translatedBy(x: 0, y: -proxy.frame(in: .local).height)
-                    //                    .scaledBy(x: proxy.frame(in: .local).width / dataBounds.width,
-                    //                              y: proxy.frame(in: .local).height / dataBounds.height)
-                    //                    .translatedBy(x: -dataBounds.minX, y: -dataBounds.minY)
-
-                    let dataTransform = CGAffineTransform(scaleX: proxy.frame(in: .local).width / width, y: 1)
+                   let dataTransform = CGAffineTransform(scaleX: proxy.frame(in: .local).width / width, y: 1)
                         .translatedBy(x: -minX, y: 0)
 
                     ForEach(numbers, id: \.self) { n in
-
                         Path { path in
                             path.move(to:    CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY))
                             path.addLine(to: CGPoint(x: multiplier * CGFloat(n), y: proxy.frame(in: .local).minY + XYPlotConstants.axisTickLength))
@@ -226,7 +217,6 @@ struct YAxisView: View {
 
     var body: some View {
         HStack(spacing: 0) {
-
             Text(layer.yLabel.makeLabelText(exponent))
                 .font(Font.system(size: XYPlotConstants.axisLabelFontSize, design: .monospaced))
                 .fixedSize()
