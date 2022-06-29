@@ -68,7 +68,7 @@ public struct XYPlotView: View {
     }
     
     public init(_ model: XYPlotModel) {
-        print("XYPlotView.init selectedLayer=\(String(describing: model.selectedLayer))")
+        // print("XYPlotView.init selectedLayer=\(String(describing: model.selectedLayer))")
         self.model = model
     }
 }
