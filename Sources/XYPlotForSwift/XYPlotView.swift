@@ -61,8 +61,7 @@ public struct XYPlotView: View {
             }
             else {
                 Text("No Data")
-                    .font(.title)
-                    .foregroundColor(.gray)
+                    .modifier(GrayTitle())
             }
         }
     }
