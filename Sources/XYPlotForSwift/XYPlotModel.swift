@@ -84,7 +84,7 @@ public struct XYLayer {
 
     public private(set) var dataSets = [XYDataSet]()
 
-    public private(set) var dataBounds: XYRect? = nil
+    private var dataBounds: XYRect? = nil
 
     public init(xLabel: AxisLabel, yLabel: AxisLabel) {
         self.xLabel = xLabel
@@ -110,7 +110,8 @@ public struct XYLayer {
         for idx in dataSets.indices {
             dataSets[idx].points.removeAll()
         }
-        bounds = nil
+        self.dataBounds = nil
+        self.bounds = nil
     }
 
     /// This expands the bounds so that axis numbers look good
