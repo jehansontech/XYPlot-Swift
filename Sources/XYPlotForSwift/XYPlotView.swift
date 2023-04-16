@@ -33,7 +33,7 @@ public struct XYPlotView: View {
                 HStack(spacing: 0) {
                     YAxisView(model.layers[selectedLayer])
                         .frame(width: XYPlotConstants.yAxisLabelsWidth)
-                    LayerView(model.layers[selectedLayer])
+                    LayerView(model.layers[selectedLayer], model.colors)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .border(Color.gray)
                     Spacer()
@@ -52,7 +52,7 @@ public struct XYPlotView: View {
                 HStack(alignment: .top, spacing: 0) {
                     Spacer()
                         .frame(width: XYPlotConstants.yAxisLabelsWidth)
-                    LegendView(model.layers[selectedLayer])
+                    LegendView(model.layers[selectedLayer], model.colors)
                     Spacer().frame(width: 20)
                     CaptionView(model)
                     Spacer()

@@ -11,6 +11,8 @@ struct LayerView: View {
 
     var layer: XYLayer
 
+    var colors: XYPlotColors
+
     var minX: CGFloat {
         if let bounds = layer.bounds {
             return bounds.minX
@@ -67,13 +69,14 @@ struct LayerView: View {
                         }
                     }
                     .applying(dataTransform)
-                    .stroke(layer.dataSets[lineIdx].color)
+                    .stroke(colors.color(forNumber: layer.dataSets[lineIdx].colorNumber))
                 }
             }
         }
     }
 
-    init(_ layer: XYLayer) {
+    init(_ layer: XYLayer, _ colors: XYPlotColors) {
         self.layer = layer
+        self.colors = colors
     }
 }

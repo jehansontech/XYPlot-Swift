@@ -34,14 +34,17 @@ public class XYPlotModel: ObservableObject {
 
     public var title: String
 
+    public var colors: XYPlotColors
+
     @Published public var caption: String
 
     @Published public var layers: [XYLayer]
 
     @Published public var selectedLayer: Int?
 
-    public init(title: String = "", caption: String = "") {
+    public init(title: String = "", caption: String = "", defaultColor: Color = .black) {
         self.title = title
+        self.colors = XYPlotColors(defaultColor)
         self.caption = caption
         self.layers = [XYLayer]()
         self.selectedLayer = nil
@@ -63,7 +66,31 @@ public class XYPlotModel: ObservableObject {
     }
 }
 
-public struct XYLayer {
+public struct XYPlotColors {
+
+    public var defaultColor: Color
+
+    public var colorForNumber: [Int: Color]
+
+    public init(_ defaultColor: Color) {
+        self.defaultColor = defaultColor
+        self.colorForNumber = [Int: Color]()
+    }
+
+    public mutating func registerColor(_ color: Color, number: Int) {
+        colorForNumber[number] = color
+    }
+
+    public mutating func clearColors() {
+        self.colorForNumber.removeAll()
+    }
+
+    public func color(forNumber colorNumber: Int) -> Color {
+        return colorForNumber[colorNumber] ?? defaultColor
+    }
+}
+
+public struct XYLayer: Codable {
 
     public var hasData: Bool {
         for dataSet in dataSets {
@@ -93,9 +120,9 @@ public struct XYLayer {
     }
 
     /// returns new data set's index
-    @discardableResult public mutating func addDataSet(_ label: String, _ color: Color = .black, _ stroke: Stroke = .solid) -> Int {
+    @discardableResult public mutating func addDataSet(name: String, colorNumber: Int, stroke: Stroke = .solid) -> Int {
         let idx = dataSets.count
-        dataSets.append(XYDataSet(label, color, stroke))
+        dataSets.append(XYDataSet(name, colorNumber, stroke))
         return idx
     }
 
@@ -183,15 +210,16 @@ public struct AxisLabel: Codable {
     }
 }
 
-public struct XYDataSet { //: Codable {
+public struct XYDataSet: Codable {
+
     public var label: String
-    public var color: Color
+    public var colorNumber: Int
     public var stroke: Stroke
     public var points = [XYPoint]()
 
-    public init(_ label: String, _ color: Color = .black, _ stroke: Stroke = .solid) {
+    public init(_ label: String, _ colorNumber: Int, _ stroke: Stroke = .solid) {
         self.label = label
-        self.color = color
+        self.colorNumber = colorNumber
         self.stroke = stroke
     }
 
@@ -213,6 +241,6 @@ public struct XYDataSet { //: Codable {
 //    }
 }
 
-public enum Stroke: String {
+public enum Stroke: String, Codable {
     case solid
 }

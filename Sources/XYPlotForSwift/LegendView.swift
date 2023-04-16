@@ -13,13 +13,15 @@ struct LegendColumn: View {
 
     let lineIndices: [Int]
 
+    var colors: XYPlotColors
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(lineIndices, id: \.self) { idx in
                 HStack {
                     // TODO use the stroke
                     Rectangle()
-                        .fill(layer.dataSets[idx].color)
+                        .fill(colors.color(forNumber: layer.dataSets[idx].colorNumber))
                         .frame(width: 50, height: 2)
 
                     Text(lineLabel(idx))
@@ -28,9 +30,10 @@ struct LegendColumn: View {
         }
     }
 
-    init(_ layer: XYLayer, _ lineIndices: [Int]) {
+    init(_ layer: XYLayer, _ lineIndices: [Int], _ colors: XYPlotColors) {
         self.layer = layer
         self.lineIndices = lineIndices
+        self.colors = colors
     }
 
     func lineLabel(_ idx: Int) -> String {
@@ -45,17 +48,20 @@ struct LegendView: View {
 
     var columns: [[Int]]
 
+    var colors: XYPlotColors
+
     var body: some View {
         HStack(alignment: .top) {
             ForEach(columns, id: \.self) { column in
-                LegendColumn(layer, column)
+                LegendColumn(layer, column, colors)
             }
         }
     }
 
-    init(_ layer: XYLayer) {
+    init(_ layer: XYLayer, _ colors: XYPlotColors) {
         self.layer = layer
         self.columns = Self.makeColumns(layer.dataSets)
+        self.colors = colors
     }
 
     static func makeColumns(_ lines: [XYDataSet]) -> [[Int]] {
