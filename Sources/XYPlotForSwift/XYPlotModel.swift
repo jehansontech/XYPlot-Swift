@@ -146,7 +146,7 @@ public struct XYLayer {
     }
 }
 
-public struct AxisLabel {
+public struct AxisLabel: Codable {
 
     public var name: String
 
@@ -183,7 +183,7 @@ public struct AxisLabel {
     }
 }
 
-public struct XYDataSet {
+public struct XYDataSet { //: Codable {
     public var label: String
     public var color: Color
     public var stroke: Stroke
@@ -194,8 +194,25 @@ public struct XYDataSet {
         self.color = color
         self.stroke = stroke
     }
+
+//    public init(from decoder: Decoder) throws {
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+//
+//    }
+//
+//    public func encode(to encoder: Encoder) throws {
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+//
+//    }
+//
+//    private enum CodingKeys : String, CodingKey {
+//        case label
+//        case color
+//        case stroke
+//        case points
+//    }
 }
 
-public enum Stroke {
+public enum Stroke: String {
     case solid
 }
